@@ -1,0 +1,30 @@
+name: Weekly push
+
+on:
+  schedule:
+    # GitHub cron 은 UTC 기준. 한국 시간(UTC+9)으로 월요일 09:03 에 발송한다.
+    # 요일/시간을 바꾸려면 아래 한 줄만 고치면 된다. (분 필드 앞 3분은 정각 몰림을 피하려는 것)
+    #   분 시 일 월 요일(0=일 … 6=토)      예) 금요일 저녁 8시(KST) = 3 11 * * 5
+    - cron: '3 0 * * 1'
+  workflow_dispatch: # Actions 탭에서 수동으로도 보낼 수 있음
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run notify
+        env:
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          PUSH_SUBSCRIPTIONS: ${{ secrets.PUSH_SUBSCRIPTIONS }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/

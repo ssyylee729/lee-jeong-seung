@@ -1,0 +1,243 @@
+{
+  "categories": [
+    {
+      "id": "concert",
+      "name": "공연 예매",
+      "emoji": "🎤"
+    },
+    {
+      "id": "family",
+      "name": "가족 기념일",
+      "emoji": "🎂"
+    },
+    {
+      "id": "diet",
+      "name": "다이어트",
+      "emoji": "💪"
+    },
+    {
+      "id": "culture",
+      "name": "문화",
+      "emoji": "🎬"
+    }
+  ],
+  "items": [
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "AKMU",
+      "title": "AKMU 콘서트 [소문의 낙원] 앙코르",
+      "summary": "2027/1/2~3 고양 킨텍스 · YES24 단독. 팬클럽(위버스) 선예매는 11/9 20:00~11/10 11:59, 휠체어석은 11/16 09:00.",
+      "openAt": "2026-11-10T20:00+09:00",
+      "subtype": "YES24",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16269123"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "KATSEYE",
+      "title": "KATSEYE 첫 단독 내한공연",
+      "summary": "2027/2/4 KSPO DOME · NOL 티켓. 위버스 선예매 인증은 11/9~11/10. 일반예매를 11/12 12:00으로 보도한 기사도 있어 둘 중 이른 쪽으로 표시했습니다.",
+      "openAt": "2026-11-10T12:00+09:00",
+      "subtype": "인터파크",
+      "unverified": true,
+      "url": "https://nol.yanolja.com/ticket/products/26015604"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "성시경",
+      "title": "2026 성시경 연말 콘서트",
+      "summary": "12/31~1/3 (4회) 올림픽공원 KSPO DOME · NOL 티켓 단독. 회차당 1인 4매. 팬클럽 선예매는 11/12 14:00 종료.",
+      "openAt": "2026-11-12T20:00+09:00",
+      "subtype": "인터파크",
+      "url": "https://nol.yanolja.com/ticket/products/26015783"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "혁오",
+      "title": "HYUKOH [33] TOUR 서울",
+      "summary": "2027/1/16~17 올림픽홀 · 멜론티켓 단독. 기사에 '12일 20시'라고만 나와 월은 문맥으로 추정했습니다.",
+      "openAt": "2026-11-12T20:00+09:00",
+      "subtype": "멜론티켓",
+      "unverified": true,
+      "url": "https://www.koreajoongangdaily.com/entertainment/indie-band-hyukoh-to-launch-33-world-tour-across-asia-north-america/12959152"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "김준수(XIA)",
+      "title": "2026 XIA Musical Concert with Orchestra Vol.9",
+      "summary": "12/18~20 올림픽공원 티켓링크 라이브 아레나. 멤버십 선예매 11/23, 일반예매 11/25 (시각 미확인).",
+      "openAt": "2026-11-25T00:00+09:00",
+      "subtype": "티켓링크",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16271784"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "김지웅(ZEROBASEONE)",
+      "title": "KIM JI WOONG BIRTHDAY PARTY \"WISHLIST\"",
+      "summary": "12/12 명화라이브홀 · NOL 티켓 단독. 오픈 시각은 목록 스니펫에서만 확인했습니다.",
+      "openAt": "2026-11-09T20:00+09:00",
+      "subtype": "인터파크",
+      "unverified": true,
+      "url": "https://nol.yanolja.com/ticket/display/upcoming"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "터치드",
+      "title": "터치드 콘서트 'HIGHLIGHT Ⅴ'",
+      "summary": "공연일·장소 미확인. 오픈 시각은 NOL 오픈 예정 목록에서만 확인했습니다.",
+      "openAt": "2026-11-10T19:00+09:00",
+      "subtype": "인터파크",
+      "unverified": true,
+      "url": "https://tickets.interpark.com/contents/notice"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "박스오피스 TOP3 (11/6~8 주말)",
+      "summary": "1위 극장판 치이카와: 인어 섬의 비밀(5주 연속, 누적 약 279만) · 2위 최종면접(누적 약 16.7만) · 3위 하트 오브 비스트",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16271539"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "최종면접",
+      "summary": "11/4 개봉 밀실 심리 스릴러. 개봉 첫 주 상위권.",
+      "rating": "네이버 실관람객 9.7 · CGV 골든에그 95% · 롯데 9.2 · 메가박스 8.5",
+      "url": "https://www.newsbuzz.co.kr/news/articleView.html?idxno=26716"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "듄 (IMAX 재개봉)",
+      "summary": "일주일 한정 IMAX 재개봉, 예매율 2위권.",
+      "deadline": "2026-11-11",
+      "deadlineText": "재개봉",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16271542"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "마더 메리 / 폴2: 데드포인트",
+      "summary": "11/11 개봉 신작. 개봉일 표기가 기사마다 달라 확인이 필요합니다.",
+      "deadline": "2026-11-11",
+      "deadlineText": "개봉",
+      "unverified": true,
+      "url": "https://www.sportsworldi.com/newsView/20261108507915?OutUrl=google"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "폭설",
+      "summary": "김윤석·구교환 주연 미스터리. 눈에 고립된 기차역에서 시신이 발견된다. 예매율 6위(11/6 기준).",
+      "deadline": "2026-11-18",
+      "deadlineText": "개봉",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16269573"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "슬픈 열대",
+      "summary": "박훈정 감독, 김명민·박해수 출연 액션 누아르.",
+      "deadline": "2026-11-25",
+      "deadlineText": "개봉",
+      "url": "https://www.sportsworldi.com/newsView/20261108507915?OutUrl=google"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "OTT",
+      "title": "가능한 사랑 (넷플릭스)",
+      "summary": "이창동 감독 신작, 전도연·설경구. 11/6 공개 후 11/7 한국 영화 TOP10 1위. 베니스 심사위원대상.",
+      "rating": "극장 개봉 시 네이버 실관람객 8.8 · 롯데 9.1 · 메가박스 9.0",
+      "url": "https://www.wikitree.co.kr/articles/1172630"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "OTT",
+      "title": "데블스 플랜: 데드 어게인 (넷플릭스)",
+      "summary": "정종연 PD 서바이벌 예능 시즌3, 플레이어 16명.",
+      "deadline": "2026-11-10",
+      "deadlineText": "공개",
+      "url": "https://aboda.kr/entry/2026%EB%85%84-11%EC%9B%94-%EB%84%B7%ED%94%8C%EB%A6%AD%EC%8A%A4-%EC%8B%A0%EC%9E%91-%EC%B6%94%EC%B2%9C-%EC%9D%B4%EC%B0%BD%EB%8F%99-%EC%8B%A0%EC%9E%91%EB%B6%80%ED%84%B0-%EB%8D%B0%EB%B8%94%EC%8A%A4"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "OTT",
+      "title": "요즘 화제 (티빙·디즈니+·쿠팡플레이)",
+      "summary": "티빙 「100일의 거짓말」 (10월 4주 주간 종합 1위) · 디즈니+ 「재혼 황후」 (11/4 공개) · 쿠팡플레이 「랜턴스」 (HBO). 넷플릭스 한국 TOP10 시리즈 순위는 확인하지 못했습니다.",
+      "url": "https://news.jkn.co.kr/post/1076115"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "도서",
+      "title": "교보문고 주간 베스트셀러 TOP5",
+      "summary": "1 가호(무라카미 하루키, 2주 연속 1위) · 2 트렌드 코리아 2027 · 3 퍼플필 · 4 세네카, 오늘을 빼앗기고 있는 당신에게 · 5 빨강의 자서전 (집계 10/30~11/5). 예스24도 「가호」가 1위입니다.",
+      "url": "https://www.fnnews.com/news/202611051123070960"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "전시",
+      "title": "샤갈, 너머의 여정",
+      "summary": "퐁피두센터 한화 컬렉션전. 샤갈의 회화·조각·도자 65점. 일반 예매 11/15부터, 성인 25,000원. (~2027/3/28)",
+      "deadline": "2026-11-24",
+      "deadlineText": "개막",
+      "url": "https://www.centrepompidou-hanwha.kr/visit/tickets/list"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "전시",
+      "title": "모던 아트의 탄생 - 쿤스트하우스 취리히 소장품",
+      "summary": "국립중앙박물관. 모네·칸딘스키·클레 등 85점, 얼리버드 매진. (~2027/4/18)",
+      "deadline": "2026-11-27",
+      "deadlineText": "개막",
+      "url": "https://www.seoul.co.kr/news/life/2026/10/26/20261026500145"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "전시",
+      "title": "읽기의 기술: 종이에서 픽셀로",
+      "summary": "국립현대미술관 서울관. (~2027/4/4)",
+      "deadline": "2026-11-20",
+      "deadlineText": "개막",
+      "url": "https://tixkorea.com/exhibitions/448"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "전시",
+      "title": "카우스: 친구, 그리고 이웃",
+      "summary": "스페이스K 서울(마곡). 신작 회화·조각 20여 점, 화~일 10~18시.",
+      "deadline": "2026-12-27",
+      "deadlineText": "종료",
+      "url": "https://spacek.co.kr/concert/view.do?eco_idx=240"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "전시",
+      "title": "웨인 티보 전 [The Order of Things]",
+      "summary": "DDP 전시1관. 국내 첫 회고전, 회화·드로잉 105점.",
+      "deadline": "2027-02-21",
+      "deadlineText": "종료",
+      "url": "https://booking.kakao.com/detail/ticketStore/299002"
+    }
+  ]
+}

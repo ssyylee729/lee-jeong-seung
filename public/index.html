@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>이번 주 놓치기 쉬운 정보</title>
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="주간정보" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <h1>이번 주 놓치기 쉬운 정보</h1>
+      <div class="who">
+        <span class="muted">안녕하세요,</span>
+        <b id="nickname-label"></b>
+        <button id="nickname-edit" type="button" class="link">닉네임 변경</button>
+        <form id="nickname-form" hidden>
+          <input id="nickname-input" type="text" autocomplete="off" enterkeyhint="done" aria-label="닉네임" />
+          <button type="submit" class="small">저장</button>
+          <button id="nickname-reset" type="button" class="small ghost">기본값</button>
+        </form>
+      </div>
+      <div class="week-nav">
+        <button id="prev-week" type="button" aria-label="이전 주">‹</button>
+        <span id="week-label"></span>
+        <button id="next-week" type="button" aria-label="다음 주">›</button>
+        <button id="share-view" type="button" class="share-view">이 화면 공유</button>
+      </div>
+    </header>
+
+    <nav id="filters" class="filters" aria-label="카테고리"></nav>
+
+    <main>
+      <section id="items" class="items" aria-live="polite"></section>
+
+      <section class="card notify" aria-labelledby="notify-title">
+        <h2 id="notify-title">🔔 주간 알림</h2>
+        <p id="notify-status" class="muted"></p>
+        <div id="ios-guide" class="guide" hidden>
+          <p>아이폰은 <b>홈 화면에 추가</b>한 뒤에만 알림을 받을 수 있어요.</p>
+          <ol>
+            <li>Safari 하단의 공유 버튼(⬆︎)을 누르고</li>
+            <li><b>홈 화면에 추가</b>를 선택한 다음</li>
+            <li>홈 화면에 생긴 아이콘으로 다시 열어주세요.</li>
+          </ol>
+        </div>
+        <button id="enable-notify" type="button" class="primary" hidden>알림 켜기</button>
+        <div id="sub-box" hidden>
+          <p class="muted">아래 내용을 앱 관리자에게 보내주면 알림이 시작돼요.</p>
+          <textarea id="sub-json" readonly rows="5"></textarea>
+          <div class="row">
+            <button id="copy-sub" type="button">복사</button>
+            <button id="share-sub" type="button" hidden>공유</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

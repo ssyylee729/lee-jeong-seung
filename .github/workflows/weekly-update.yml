@@ -1,0 +1,61 @@
+name: Weekly update
+
+on:
+  schedule:
+    # 일요일 22:07 UTC = 월요일 07:07 KST. 월요일 09:03 KST 알림(weekly-push.yml) 전에 끝나도록 2시간 앞서 돌린다.
+    - cron: '7 22 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '조사만 하고 info.json 은 커밋하지 않기'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # info.json 커밋
+  actions: write  # 갱신 후 Pages 배포 workflow 를 실행
+
+concurrency:
+  group: weekly-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+      - name: 공연·문화 정보 조사
+        run: npm run update ${{ inputs.dry_run && '-- --dry-run' || '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: 변경 사항 커밋
+        id: commit
+        if: ${{ !inputs.dry_run }}
+        run: |
+          if git diff --quiet -- public/data/info.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "변경 없음"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/info.json
+          git commit -m "chore: 주간 공연·문화 정보 갱신 ($(TZ=Asia/Seoul date +%F))"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # GITHUB_TOKEN 으로 push 한 커밋은 다른 workflow 를 자동으로 깨우지 못하므로 배포를 직접 실행한다
+      - name: Pages 배포
+        if: ${{ steps.commit.outputs.changed == 'true' }}
+        run: gh workflow run deploy-pages.yml --ref "${{ github.ref_name }}"
+        env:
+          GH_TOKEN: ${{ github.token }}

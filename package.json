@@ -1,0 +1,27 @@
+{
+  "name": "lee-jeong-seung",
+  "version": "1.0.0",
+  "description": "언니랑 나랑 주간 정보 알림",
+  "scripts": {
+    "vapid": "node scripts/generate-vapid.mjs",
+    "icons": "node scripts/generate-icons.mjs",
+    "notify": "node scripts/send-push.mjs",
+    "dev": "node scripts/dev-server.mjs",
+    "update": "node scripts/update-info.mjs",
+    "test": "node --test scripts/test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssyylee729/lee-jeong-seung.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ssyylee729/lee-jeong-seung/issues"
+  },
+  "homepage": "https://github.com/ssyylee729/lee-jeong-seung#readme",
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
+    "web-push": "^4.0.0"
+  }
+}
