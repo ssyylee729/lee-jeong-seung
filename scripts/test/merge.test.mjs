@@ -104,3 +104,58 @@ test('mergeItems: 같은 주에 두 번 돌려도 중복되지 않는다', () =>
   const twice = mergeItems(once, accepted, { now });
   assert.deepEqual(twice, once);
 });
+
+test('보관 기간: 8주보다 오래된 항목은 지우되, 오픈 전 공연은 남긴다', async () => {
+  const { oldestKeptWeek, KEEP_WEEKS } = await import('../../public/lib/retention.js');
+  assert.equal(KEEP_WEEKS, 8);
+  // 이번 주 11/16 → 가장 오래된 보관 주는 7주 전 9/28 (이번 주 포함 8주)
+  assert.equal(oldestKeptWeek('2026-11-16'), '2026-09-28');
+
+  const old = (week, extra = {}) => ({ week, category: 'culture', subtype: '영화', title: week, ...extra });
+  const existing = [
+    old('2026-09-21'), // 8주 + 1 → 삭제
+    old('2026-09-28'), // 경계 → 유지
+    old('2026-11-09'),
+    { week: '2026-09-07', category: 'concert', artist: '장기 대기', title: '오래된 주에 적었지만 아직 오픈 전', openAt: '2026-12-01T20:00+09:00' },
+    { week: '2026-09-07', category: 'concert', artist: '이미 오픈', title: '오래되고 오픈도 끝남', openAt: '2026-09-10T20:00+09:00' },
+  ];
+  const out = mergeItems(existing, { concerts: [], culture: [] }, { now });
+  assert.deepEqual(out.map((i) => i.title).sort(), ['2026-09-28', '2026-11-09', '오래된 주에 적었지만 아직 오픈 전'].sort());
+});
+
+test('요약 검증: 3줄까지, 90자 이하의 문자열만', async () => {
+  const { validateBriefing } = await import('../lib/merge.mjs');
+  const long = '가'.repeat(91);
+  const { briefing, rejected } = validateBriefing({
+    concert: ['  김지웅  생일  파티 11/9 20:00 오픈 ', '', 123, long, 'b', 'c', 'd'],
+    culture: 'not-array',
+    family: ['무시됨'], // 모델이 만든 가족 요약은 쓰지 않는다 (앱이 계산)
+  });
+  assert.deepEqual(briefing.concert, ['김지웅 생일 파티 11/9 20:00 오픈', 'b', 'c']);
+  assert.equal(briefing.family, undefined);
+  assert.equal(briefing.culture, undefined);
+  assert.equal(rejected.length, 4); // 빈 줄, 숫자, 91자, culture 배열 아님
+  assert.deepEqual(validateBriefing(undefined).briefing, {});
+  assert.deepEqual(validateBriefing({ concert: [] }).briefing, {});
+});
+
+test('요약 병합: 이번 주 교체, 새 요약이 비면 기존 유지, 오래된 주 정리', async () => {
+  const { mergeBriefings } = await import('../lib/merge.mjs');
+  const existing = { '2026-09-14': { concert: ['오래됨'] }, '2026-11-09': { concert: ['지난주'] }, '2026-11-16': { concert: ['이번주 기존'] } };
+  const out = mergeBriefings(existing, { concert: ['새 요약'] }, { now });
+  assert.deepEqual(out, { '2026-11-09': { concert: ['지난주'] }, '2026-11-16': { concert: ['새 요약'] } });
+  // 모델이 요약을 못 줬으면 이번 주 기존 요약은 건드리지 않는다
+  const kept = mergeBriefings(existing, {}, { now });
+  assert.deepEqual(kept['2026-11-16'], { concert: ['이번주 기존'] });
+  assert.equal(kept['2026-09-14'], undefined);
+  assert.deepEqual(mergeBriefings(undefined, {}, { now }), {});
+});
+
+test('문화 항목: list 플래그는 true 일 때만 통과', () => {
+  const ok = validateAll({ concerts: [], culture: [
+    { subtype: '도서', title: 'TOP5', url: 'https://x.com', list: true },
+    { subtype: '도서', title: '단권', url: 'https://x.com', list: 'yes' },
+    { subtype: '영화', title: '단편', url: 'https://x.com' },
+  ] }, ctx);
+  assert.deepEqual(ok.accepted.culture.map((c) => c.list), [true, undefined, undefined]);
+});

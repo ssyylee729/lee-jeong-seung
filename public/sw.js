@@ -1,4 +1,4 @@
-const CACHE = 'weekly-info-v2';
+const CACHE = 'weekly-info-v8';
 const SHELL = [
   './',
   'index.html',
@@ -8,6 +8,12 @@ const SHELL = [
   'lib/briefing.js',
   'lib/family.js',
   'lib/share.js',
+  'lib/mood.js',
+  'lib/retention.js',
+  'lib/thumb.js',
+  'rani/neutral.svg',
+  'rani/sad.svg',
+  'rani/happy.svg',
   'data/info.json',
   'data/diet.json',
   'manifest.webmanifest',
@@ -54,7 +60,7 @@ self.addEventListener('push', (event) => {
     payload = { body: event.data ? event.data.text() : '' };
   }
 
-  const title = payload.title || '이번 주 놓치기 쉬운 정보';
+  const title = payload.title || '🍀 라니네 전용 앱';
   event.waitUntil(
     self.registration.showNotification(title, {
       body: payload.body || '',

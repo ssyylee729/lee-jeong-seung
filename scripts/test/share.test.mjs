@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
+  DEFAULT_CATEGORY,
   DEFAULT_NICKNAME,
   NICKNAME_MAX,
   cardShareText,
@@ -21,21 +22,23 @@ test('닉네임: 기본값, 공백 정리, 길이 제한', () => {
   assert.equal([...normalizeNickname('🐱'.repeat(20))].length, NICKNAME_MAX);
 });
 
-test('viewUrl: 주/카테고리를 쿼리로, 전체는 생략', () => {
+test('viewUrl: 주/카테고리를 쿼리로, 기본 카테고리(공연)는 생략', () => {
   const base = 'https://x.github.io/lee-jeong-seung/';
-  assert.equal(viewUrl(base, { week: '2026-11-09', category: 'concert' }), `${base}?week=2026-11-09&cat=concert`);
-  assert.equal(viewUrl(base, { week: '2026-11-09', category: 'all' }), `${base}?week=2026-11-09`);
+  assert.equal(DEFAULT_CATEGORY, 'concert');
+  assert.equal(viewUrl(base, { week: '2026-11-09', category: 'culture' }), `${base}?week=2026-11-09&cat=culture`);
+  assert.equal(viewUrl(base, { week: '2026-11-09', category: 'concert' }), `${base}?week=2026-11-09`);
   // 기존 쿼리/해시는 지운다
-  assert.equal(viewUrl(`${base}?foo=1#x`, { week: '2026-11-09', category: 'all' }), `${base}?week=2026-11-09`);
+  assert.equal(viewUrl(`${base}?foo=1#x`, { week: '2026-11-09', category: 'concert' }), `${base}?week=2026-11-09`);
 });
 
 test('parseView: 유효한 값만 받아들인다', () => {
-  const ctx = { weeks: ['2026-11-09', '2026-11-02'], categories: ['concert', 'diet'] };
-  assert.deepEqual(parseView('?week=2026-11-02&cat=diet', ctx), { week: '2026-11-02', category: 'diet' });
-  assert.deepEqual(parseView('', ctx), { week: null, category: 'all' });
-  assert.deepEqual(parseView('?week=1999-01-04&cat=nope', ctx), { week: null, category: 'all' }); // 없는 주/카테고리
-  assert.deepEqual(parseView('?week=<script>&cat=<b>', ctx), { week: null, category: 'all' });
-  assert.deepEqual(parseView('?cat=all', ctx), { week: null, category: 'all' });
+  const ctx = { weeks: ['2026-11-09', '2026-11-02'], categories: ['concert', 'family', 'culture'] };
+  assert.deepEqual(parseView('?week=2026-11-02&cat=family', ctx), { week: '2026-11-02', category: 'family' });
+  assert.deepEqual(parseView('', ctx), { week: null, category: 'concert' });
+  assert.deepEqual(parseView('?week=1999-01-04&cat=nope', ctx), { week: null, category: 'concert' }); // 없는 주/카테고리
+  assert.deepEqual(parseView('?week=<script>&cat=<b>', ctx), { week: null, category: 'concert' });
+  assert.deepEqual(parseView('?cat=all', ctx), { week: null, category: 'concert' }); // 예전 '전체' 링크도 안전하게
+  assert.deepEqual(parseView('?cat=diet', ctx), { week: null, category: 'concert' }); // 다이어트는 더 이상 탭이 아님
 });
 
 test('cardShareText: 있는 항목만 넣고 보낸 사람과 링크를 붙인다', () => {
@@ -63,7 +66,7 @@ test('cardShareText: 있는 항목만 넣고 보낸 사람과 링크를 붙인�
 test('viewShareText', () => {
   assert.equal(
     viewShareText({ weekLabel: '이번 주 11/9 ~ 11/15', categoryLabel: '🎤 공연 예매', nickname: '정연', link: 'L' }),
-    '이번 주 11/9 ~ 11/15 주간정보 · 🎤 공연 예매\n\n보낸 사람: 정연\nL',
+    '🍀 라니네 전용 앱 · 이번 주 11/9 ~ 11/15 · 🎤 공연 예매\n\n보낸 사람: 정연\nL',
   );
-  assert.equal(viewShareText({ weekLabel: 'w', categoryLabel: '', nickname: 'a', link: 'L' }), 'w 주간정보\n\n보낸 사람: a\nL');
+  assert.equal(viewShareText({ weekLabel: 'w', categoryLabel: '', nickname: 'a', link: 'L' }), '🍀 라니네 전용 앱 · w\n\n보낸 사람: a\nL');
 });

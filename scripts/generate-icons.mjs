@@ -1,123 +1,42 @@
-// 외부 이미지 도구 없이 앱 아이콘(PNG)을 직접 그려서 public/icons 에 저장한다.
-// 디자인: 보라색 배경 + 흰색 달력 + 강조 점. 나중에 원하는 이미지로 교체해도 된다.
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { deflateSync } from 'node:zlib';
+// 라니(기본 표정)로 앱 아이콘 PNG 를 만든다 → public/icons/
+// SVG 를 PNG 로 바꾸는 데 헤드리스 Chrome 을 쓴다 (scripts/lib/render.mjs).
+import { writeFileSync } from 'node:fs';
+import { renderSvg } from './generate-rani.mjs';
+import { renderImages } from './lib/render.mjs';
 
 const OUT = new URL('../public/icons/', import.meta.url);
-mkdirSync(OUT, { recursive: true });
+const BG = '#4f46e5';
 
-const BG = [79, 70, 229];
-const WHITE = [255, 255, 255];
-const ACCENT = [251, 191, 36];
+// SVG(240칸) 안에서 얼굴은 가로 176칸(x 32~208), 중심은 (120, 128)
+const FACE_W = 176;
+const FACE_CENTER = { x: 120, y: 128 };
 
-// 중심 (cx, cy), 반폭/반높이 (hw, hh), 모서리 반지름 r 의 둥근 사각형 안인가
-function inRoundRect(x, y, cx, cy, hw, hh, r) {
-  const dx = Math.abs(x - cx) - (hw - r);
-  const dy = Math.abs(y - cy) - (hh - r);
-  if (dx <= 0 || dy <= 0) return Math.abs(x - cx) <= hw && Math.abs(y - cy) <= hh;
-  return dx * dx + dy * dy <= r * r;
+// face   : 얼굴 폭이 아이콘 폭에서 차지하는 비율
+// rounded: 모서리를 둥글게 (일반 아이콘)
+// 마스커블은 OS 가 모양을 잘라내므로 배경을 전체에 채우고, 얼굴은 중앙 안전 영역(지름 80%) 안에 둔다.
+// 애플 터치 아이콘은 iOS 가 직접 둥글게 만들므로 꽉 채운 정사각형이다.
+function iconHtml({ size, face, rounded }) {
+  const px = (size * face * 240) / FACE_W; // SVG 전체를 그릴 한 변 길이
+  const unit = px / 240;
+  const left = size / 2 - FACE_CENTER.x * unit;
+  const top = size / 2 - FACE_CENTER.y * unit + size * 0.02; // 눈·코가 정중앙보다 살짝 아래로
+  const svg = renderSvg('neutral').replace(
+    '<svg ',
+    `<svg width="${px}" height="${px}" style="position:absolute;left:${left}px;top:${top}px;overflow:visible" `,
+  );
+  const radius = rounded ? `border-radius:${size * 0.22}px;` : '';
+  return `<body style="margin:0;background:transparent"><div style="position:relative;width:${size}px;height:${size}px;overflow:hidden;background:${BG};${radius}">${svg}</div></body>`;
 }
 
-// scale: 달력 그림 크기 비율 (maskable 은 안전 영역 때문에 작게)
-function colorAt(u, v, scale, rounded) {
-  // u, v 는 0..1
-  if (rounded && !inRoundRect(u, v, 0.5, 0.5, 0.5, 0.5, 0.22)) return null;
+const specs = [
+  ['icon-192.png', { size: 192, face: 0.7, rounded: true }],
+  ['icon-512.png', { size: 512, face: 0.7, rounded: true }],
+  ['icon-maskable-512.png', { size: 512, face: 0.56, rounded: false }],
+  ['apple-touch-icon.png', { size: 180, face: 0.7, rounded: false }],
+];
 
-  const s = (n) => 0.5 + (n - 0.5) * scale;
-  const calHw = 0.31 * scale;
-  const calHh = 0.28 * scale;
-  const calCy = s(0.54);
-  const inCalendar = inRoundRect(u, v, 0.5, calCy, calHw, calHh, 0.06 * scale);
-
-  if (!inCalendar) {
-    // 달력 위쪽 고리 두 개
-    for (const rx of [0.5 - 0.15 * scale, 0.5 + 0.15 * scale]) {
-      if (inRoundRect(u, v, rx, calCy - calHh, 0.02 * scale, 0.05 * scale, 0.02 * scale)) return WHITE;
-    }
-    return BG;
-  }
-
-  // 달력 윗부분 띠는 배경색(구분선 효과), 아래는 흰색
-  const bandBottom = calCy - calHh + 0.1 * scale;
-  if (v < bandBottom) return WHITE;
-  if (v < bandBottom + 0.018 * scale) return BG;
-
-  // 강조 점 (이번 주 표시)
-  const dotCx = 0.5 + 0.1 * scale;
-  const dotCy = calCy + 0.09 * scale;
-  if ((u - dotCx) ** 2 + (v - dotCy) ** 2 <= (0.07 * scale) ** 2) return ACCENT;
-
-  return WHITE;
-}
-
-const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
-  let c = n;
-  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-  return c >>> 0;
+const pngs = await renderImages(specs.map(([, o]) => ({ html: iconHtml(o), width: o.size, height: o.size, format: 'png' })));
+specs.forEach(([name], i) => {
+  writeFileSync(new URL(name, OUT), pngs[i]);
+  console.log(`public/icons/${name} (${pngs[i].length} bytes)`);
 });
-
-function crc32(buf) {
-  let c = 0xffffffff;
-  for (const b of buf) c = CRC_TABLE[(c ^ b) & 0xff] ^ (c >>> 8);
-  return (c ^ 0xffffffff) >>> 0;
-}
-
-function chunk(type, data) {
-  const len = Buffer.alloc(4);
-  len.writeUInt32BE(data.length);
-  const body = Buffer.concat([Buffer.from(type, 'ascii'), data]);
-  const crc = Buffer.alloc(4);
-  crc.writeUInt32BE(crc32(body));
-  return Buffer.concat([len, body, crc]);
-}
-
-function png(size, { scale = 1, rounded = false } = {}) {
-  const SS = 3; // 3x3 슈퍼샘플링으로 가장자리를 부드럽게
-  const rows = [];
-  for (let y = 0; y < size; y++) {
-    const row = Buffer.alloc(1 + size * 4); // 첫 바이트는 필터 타입(0)
-    for (let x = 0; x < size; x++) {
-      let r = 0, g = 0, b = 0, a = 0;
-      for (let sy = 0; sy < SS; sy++) {
-        for (let sx = 0; sx < SS; sx++) {
-          const c = colorAt((x + (sx + 0.5) / SS) / size, (y + (sy + 0.5) / SS) / size, scale, rounded);
-          if (c) { r += c[0]; g += c[1]; b += c[2]; a += 1; }
-        }
-      }
-      const o = 1 + x * 4;
-      if (a) {
-        row[o] = Math.round(r / a);
-        row[o + 1] = Math.round(g / a);
-        row[o + 2] = Math.round(b / a);
-      }
-      row[o + 3] = Math.round((a / (SS * SS)) * 255);
-    }
-    rows.push(row);
-  }
-
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(size, 0);
-  ihdr.writeUInt32BE(size, 4);
-  ihdr[8] = 8; // bit depth
-  ihdr[9] = 6; // RGBA
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk('IHDR', ihdr),
-    chunk('IDAT', deflateSync(Buffer.concat(rows))),
-    chunk('IEND', Buffer.alloc(0)),
-  ]);
-}
-
-const files = {
-  'icon-192.png': png(192, { rounded: true }),
-  'icon-512.png': png(512, { rounded: true }),
-  // maskable 은 OS 가 모양을 잘라내므로 전체를 채우고 그림은 안쪽 80% 안에 둔다
-  'icon-maskable-512.png': png(512, { scale: 0.8 }),
-  // iOS 는 투명 배경을 검게 채우므로 꽉 채운 정사각형을 쓴다
-  'apple-touch-icon.png': png(180),
-};
-
-for (const [name, data] of Object.entries(files)) {
-  writeFileSync(new URL(name, OUT), data);
-  console.log(`public/icons/${name} (${data.length} bytes)`);
-}

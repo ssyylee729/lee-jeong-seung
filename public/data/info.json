@@ -11,11 +11,6 @@
       "emoji": "🎂"
     },
     {
-      "id": "diet",
-      "name": "다이어트",
-      "emoji": "💪"
-    },
-    {
       "id": "culture",
       "name": "문화",
       "emoji": "🎬"
@@ -41,7 +36,8 @@
       "openAt": "2026-11-10T12:00+09:00",
       "subtype": "인터파크",
       "unverified": true,
-      "url": "https://nol.yanolja.com/ticket/products/26015604"
+      "url": "https://nol.yanolja.com/ticket/products/26015604",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26015604_p.gif"
     },
     {
       "week": "2026-11-09",
@@ -51,7 +47,8 @@
       "summary": "12/31~1/3 (4회) 올림픽공원 KSPO DOME · NOL 티켓 단독. 회차당 1인 4매. 팬클럽 선예매는 11/12 14:00 종료.",
       "openAt": "2026-11-12T20:00+09:00",
       "subtype": "인터파크",
-      "url": "https://nol.yanolja.com/ticket/products/26015783"
+      "url": "https://nol.yanolja.com/ticket/products/26015783",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26015783_p.gif"
     },
     {
       "week": "2026-11-09",
@@ -62,7 +59,8 @@
       "openAt": "2026-11-12T20:00+09:00",
       "subtype": "멜론티켓",
       "unverified": true,
-      "url": "https://www.koreajoongangdaily.com/entertainment/indie-band-hyukoh-to-launch-33-world-tour-across-asia-north-america/12959152"
+      "url": "https://www.koreajoongangdaily.com/entertainment/indie-band-hyukoh-to-launch-33-world-tour-across-asia-north-america/12959152",
+      "image": "https://image.koreajoongangdaily.com/11108433.jpg?imageId=11108433&x=0&y=0&cropw=100&croph=100&panox=0&panoy=0&panow=100&panoh=100&width=1200&height=683"
     },
     {
       "week": "2026-11-09",
@@ -102,7 +100,8 @@
       "subtype": "영화",
       "title": "박스오피스 TOP3 (11/6~8 주말)",
       "summary": "1위 극장판 치이카와: 인어 섬의 비밀(5주 연속, 누적 약 279만) · 2위 최종면접(누적 약 16.7만) · 3위 하트 오브 비스트",
-      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16271539"
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16271539",
+      "list": true
     },
     {
       "week": "2026-11-09",
@@ -111,7 +110,8 @@
       "title": "최종면접",
       "summary": "11/4 개봉 밀실 심리 스릴러. 개봉 첫 주 상위권.",
       "rating": "네이버 실관람객 9.7 · CGV 골든에그 95% · 롯데 9.2 · 메가박스 8.5",
-      "url": "https://www.newsbuzz.co.kr/news/articleView.html?idxno=26716"
+      "url": "https://www.newsbuzz.co.kr/news/articleView.html?idxno=26716",
+      "image": "https://cdn.newsbuzz.co.kr/news/thumbnail/202611/26716_29714_10_v150.jpg"
     },
     {
       "week": "2026-11-09",
@@ -161,7 +161,8 @@
       "title": "가능한 사랑 (넷플릭스)",
       "summary": "이창동 감독 신작, 전도연·설경구. 11/6 공개 후 11/7 한국 영화 TOP10 1위. 베니스 심사위원대상.",
       "rating": "극장 개봉 시 네이버 실관람객 8.8 · 롯데 9.1 · 메가박스 9.0",
-      "url": "https://www.wikitree.co.kr/articles/1172630"
+      "url": "https://www.wikitree.co.kr/articles/1172630",
+      "image": "https://cdnweb01.wikitree.co.kr/webdata/editor/202611/07/img_20261107100008_56082469.jpg"
     },
     {
       "week": "2026-11-09",
@@ -171,7 +172,8 @@
       "summary": "정종연 PD 서바이벌 예능 시즌3, 플레이어 16명.",
       "deadline": "2026-11-10",
       "deadlineText": "공개",
-      "url": "https://aboda.kr/entry/2026%EB%85%84-11%EC%9B%94-%EB%84%B7%ED%94%8C%EB%A6%AD%EC%8A%A4-%EC%8B%A0%EC%9E%91-%EC%B6%94%EC%B2%9C-%EC%9D%B4%EC%B0%BD%EB%8F%99-%EC%8B%A0%EC%9E%91%EB%B6%80%ED%84%B0-%EB%8D%B0%EB%B8%94%EC%8A%A4"
+      "url": "https://aboda.kr/entry/2026%EB%85%84-11%EC%9B%94-%EB%84%B7%ED%94%8C%EB%A6%AD%EC%8A%A4-%EC%8B%A0%EC%9E%91-%EC%B6%94%EC%B2%9C-%EC%9D%B4%EC%B0%BD%EB%8F%99-%EC%8B%A0%EC%9E%91%EB%B6%80%ED%84%B0-%EB%8D%B0%EB%B8%94%EC%8A%A4",
+      "image": "https://i3.wp.com/pub-e310bf4303744c7295d9b556111ff394.r2.dev/thumbnails/1794085494096_j9v0cl.png?w=1024&fit=1024,1024&ssl=1"
     },
     {
       "week": "2026-11-09",
@@ -179,7 +181,8 @@
       "subtype": "OTT",
       "title": "요즘 화제 (티빙·디즈니+·쿠팡플레이)",
       "summary": "티빙 「100일의 거짓말」 (10월 4주 주간 종합 1위) · 디즈니+ 「재혼 황후」 (11/4 공개) · 쿠팡플레이 「랜턴스」 (HBO). 넷플릭스 한국 TOP10 시리즈 순위는 확인하지 못했습니다.",
-      "url": "https://news.jkn.co.kr/post/1076115"
+      "url": "https://news.jkn.co.kr/post/1076115",
+      "list": true
     },
     {
       "week": "2026-11-09",
@@ -187,7 +190,8 @@
       "subtype": "도서",
       "title": "교보문고 주간 베스트셀러 TOP5",
       "summary": "1 가호(무라카미 하루키, 2주 연속 1위) · 2 트렌드 코리아 2027 · 3 퍼플필 · 4 세네카, 오늘을 빼앗기고 있는 당신에게 · 5 빨강의 자서전 (집계 10/30~11/5). 예스24도 「가호」가 1위입니다.",
-      "url": "https://www.fnnews.com/news/202611051123070960"
+      "url": "https://www.fnnews.com/news/202611051123070960",
+      "list": true
     },
     {
       "week": "2026-11-09",
@@ -207,7 +211,8 @@
       "summary": "국립중앙박물관. 모네·칸딘스키·클레 등 85점, 얼리버드 매진. (~2027/4/18)",
       "deadline": "2026-11-27",
       "deadlineText": "개막",
-      "url": "https://www.seoul.co.kr/news/life/2026/10/26/20261026500145"
+      "url": "https://www.seoul.co.kr/news/life/2026/10/26/20261026500145",
+      "image": "https://img.seoul.co.kr//img/upload/2026/10/26/SSC_20261026134839_O2.jpg.webp"
     },
     {
       "week": "2026-11-09",
@@ -217,7 +222,8 @@
       "summary": "국립현대미술관 서울관. (~2027/4/4)",
       "deadline": "2026-11-20",
       "deadlineText": "개막",
-      "url": "https://tixkorea.com/exhibitions/448"
+      "url": "https://tixkorea.com/exhibitions/448",
+      "image": "https://image.tixkorea.com/acd4a355-2568-46a5-82c6-b6863a680847.webp"
     },
     {
       "week": "2026-11-09",
@@ -237,7 +243,8 @@
       "summary": "DDP 전시1관. 국내 첫 회고전, 회화·드로잉 105점.",
       "deadline": "2027-02-21",
       "deadlineText": "종료",
-      "url": "https://booking.kakao.com/detail/ticketStore/299002"
+      "url": "https://booking.kakao.com/detail/ticketStore/299002",
+      "image": "https://t1.kakaocdn.net/one/prod/product/ticketStore/79/1158435/6aded065d2975d79c04de26def968923521577.png"
     }
   ]
 }

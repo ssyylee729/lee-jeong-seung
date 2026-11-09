@@ -10,6 +10,16 @@ on:
         description: '조사만 하고 info.json 은 커밋하지 않기'
         type: boolean
         default: false
+      model:
+        description: '모델 (기본: 저장소 변수 CLAUDE_MODEL, 없으면 claude-opus-5-5)'
+        type: choice
+        default: default
+        options: [default, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5]
+      effort:
+        description: '생각 깊이 (기본: 저장소 변수 CLAUDE_EFFORT, 없으면 medium)'
+        type: choice
+        default: default
+        options: [default, low, medium, high, xhigh, max]
 
 permissions:
   contents: write # info.json 커밋
@@ -36,6 +46,9 @@ jobs:
         run: npm run update ${{ inputs.dry_run && '-- --dry-run' || '' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 수동 실행 입력 > 저장소 변수 > 코드 기본값 순서. 'default' 는 비어 있는 것으로 취급한다.
+          CLAUDE_MODEL: ${{ (inputs.model != 'default' && inputs.model) || vars.CLAUDE_MODEL }}
+          CLAUDE_EFFORT: ${{ (inputs.effort != 'default' && inputs.effort) || vars.CLAUDE_EFFORT }}
 
       - name: 변경 사항 커밋
         id: commit

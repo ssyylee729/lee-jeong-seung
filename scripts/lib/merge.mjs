@@ -1,13 +1,13 @@
 // Claude 가 돌려준 조사 결과를 검증하고 info.json 에 합치는 순수 함수들.
 // 웹에서 가져온 내용이 그대로 앱에 들어가므로, 여기서 형식과 URL 을 엄격하게 거른다.
-import { addDays, kstParts, mondayOf } from '../../public/lib/week.js';
+import { KEEP_WEEKS, oldestKeptWeek } from '../../public/lib/retention.js';
+import { kstParts, mondayOf } from '../../public/lib/week.js';
 
 export const CONCERT_SITES = ['인터파크', 'YES24', '티켓링크', '멜론티켓'];
 export const CULTURE_TYPES = ['영화', 'OTT', '도서', '전시'];
 
 const OPEN_AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?\+09:00$/;
 const YMD = /^\d{4}-\d{2}-\d{2}$/;
-const KEEP_WEEKS = 26;
 
 /** 응답 텍스트에서 마지막 ```json 블록(없으면 첫 { ~ 마지막 })을 파싱 */
 export function extractJson(text) {
@@ -108,6 +108,7 @@ export function validateCulture(raw, { seenUrls }) {
   }
   const rating = text(raw.rating, 120);
   if (rating) item.rating = rating;
+  if (raw.list === true) item.list = true; // 여러 작품을 묶은 순위 항목 (썸네일 제외)
   return { item };
 }
 
@@ -142,22 +143,60 @@ export function upcomingConcerts(items, now) {
  * 기존 items 에 새 결과를 합친다.
  *  - 이번 주(week) 항목은 통째로 교체 (같은 주에 다시 돌려도 중복되지 않는다)
  *  - 이전 주에 적힌 "아직 오픈 전" 공연은 새 결과로 대체. 단, 새 결과에 같은 artist 가 없으면 그대로 보존
- *  - 오래된 항목(KEEP_WEEKS 주 이전)은 정리
+ *  - KEEP_WEEKS 주보다 오래된 항목은 정리. 단, 아직 오픈 전인 공연은 오래된 주에 적혀 있어도 남긴다
  */
 export function mergeItems(existing, accepted, { now }) {
   const week = mondayOf(now);
-  const oldest = addDays(week, -7 * KEEP_WEEKS);
+  const oldest = oldestKeptWeek(week);
   const newArtists = new Set(accepted.concerts.map((c) => c.artist));
 
   const kept = existing.filter((i) => {
     if (i.week === week) return false;
-    if (i.week < oldest) return false;
-    if (isUpcomingConcert(i, now)) return !newArtists.has(i.artist); // 새 결과가 없는 건 보존
-    return true;
+    if (isUpcomingConcert(i, now)) return !newArtists.has(i.artist); // 새 결과가 없는 건 (오래됐어도) 보존
+    return i.week >= oldest;
   });
 
   const fresh = [...accepted.concerts, ...accepted.culture].map((i) => ({ week, ...i }));
   return [...kept, ...fresh];
+}
+
+const BRIEF_LINES = 3;
+const BRIEF_MAX = 90;
+export const BRIEF_CATEGORIES = ['concert', 'culture'];
+
+/** 모델이 쓴 요약 줄을 정리한다: 문자열만, 공백 정리, 90자 이하, 분야당 최대 3줄 */
+export function validateBriefing(raw) {
+  const briefing = {};
+  const rejected = [];
+  for (const key of BRIEF_CATEGORIES) {
+    const arr = raw?.[key];
+    if (arr == null) continue;
+    if (!Array.isArray(arr)) {
+      rejected.push(`briefing.${key}: 배열이 아님`);
+      continue;
+    }
+    const lines = [];
+    for (const l of arr) {
+      const t = typeof l === 'string' ? l.replace(/\s+/g, ' ').trim() : '';
+      if (!t) rejected.push(`briefing.${key}: 빈 줄/문자열 아님`);
+      else if ([...t].length > BRIEF_MAX) rejected.push(`briefing.${key}: ${BRIEF_MAX}자 초과 "${t.slice(0, 20)}…"`);
+      else lines.push(t);
+    }
+    if (lines.length) briefing[key] = lines.slice(0, BRIEF_LINES);
+  }
+  return { briefing, rejected };
+}
+
+/**
+ * 주별 요약을 합친다. 이번 주 요약은 새 것으로 교체하되 새 요약이 비어 있으면 기존 것을 유지하고,
+ * 보관 기간보다 오래된 주는 정리한다.
+ */
+export function mergeBriefings(existing, briefing, { now }) {
+  const week = mondayOf(now);
+  const oldest = oldestKeptWeek(week);
+  const hasNew = Object.keys(briefing).length > 0;
+  const kept = Object.fromEntries(Object.entries(existing ?? {}).filter(([w]) => w >= oldest && (w !== week || !hasNew)));
+  return hasNew ? { ...kept, [week]: briefing } : kept;
 }
 
 export function summarizeChange(before, after) {
@@ -167,4 +206,4 @@ export function summarizeChange(before, after) {
   return { added: after.filter((i) => !b.has(key(i))).length, removed: before.filter((i) => !a.has(key(i))).length };
 }
 
-export { kstParts };
+export { KEEP_WEEKS, kstParts };

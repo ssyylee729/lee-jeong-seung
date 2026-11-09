@@ -4,11 +4,13 @@
   "description": "언니랑 나랑 주간 정보 알림",
   "scripts": {
     "vapid": "node scripts/generate-vapid.mjs",
-    "icons": "node scripts/generate-icons.mjs",
     "notify": "node scripts/send-push.mjs",
     "dev": "node scripts/dev-server.mjs",
     "update": "node scripts/update-info.mjs",
-    "test": "node --test scripts/test/"
+    "test": "node --test scripts/test/",
+    "rani": "node scripts/generate-rani.mjs",
+    "icons": "node scripts/generate-icons.mjs",
+    "thumbs": "node scripts/fetch-thumbs.mjs"
   },
   "repository": {
     "type": "git",

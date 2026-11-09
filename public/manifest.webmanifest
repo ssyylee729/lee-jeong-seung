@@ -1,7 +1,7 @@
 {
-  "name": "이번 주 놓치기 쉬운 정보",
-  "short_name": "주간정보",
-  "description": "언니랑 나랑 매주 놓치기 쉬운 정보 모아보기",
+  "name": "라니네 전용 앱",
+  "short_name": "라니네",
+  "description": "정연·승연 자매의 주간 브리핑 (공연 예매·가족 기념일·문화 소식)",
   "lang": "ko",
   "start_url": "./",
   "scope": "./",

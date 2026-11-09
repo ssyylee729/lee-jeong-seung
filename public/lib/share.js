@@ -2,6 +2,7 @@
 
 export const DEFAULT_NICKNAME = '정승자매';
 export const NICKNAME_MAX = 12;
+export const DEFAULT_CATEGORY = 'concert';
 
 const WEEK = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -19,12 +20,13 @@ export function viewUrl(base, { week, category }) {
   u.search = '';
   u.hash = '';
   if (week) u.searchParams.set('week', week);
-  if (category && category !== 'all') u.searchParams.set('cat', category);
+  if (category && category !== DEFAULT_CATEGORY) u.searchParams.set('cat', category);
   return u.href;
 }
 
 /**
  * 주소의 ?week=&cat= 를 읽어 유효한 값만 돌려준다. (공유 링크가 오래됐거나 조작돼도 안전하게 기본값으로)
+ * 카테고리가 없거나 잘못되면 기본 카테고리(공연 예매).
  * @returns {{ week: string|null, category: string }}
  */
 export function parseView(search, { weeks, categories }) {
@@ -33,7 +35,7 @@ export function parseView(search, { weeks, categories }) {
   const cat = p.get('cat');
   return {
     week: week && WEEK.test(week) && weeks.includes(week) ? week : null,
-    category: cat && categories.includes(cat) ? cat : 'all',
+    category: cat && categories.includes(cat) ? cat : DEFAULT_CATEGORY,
   };
 }
 
@@ -52,5 +54,5 @@ export function cardShareText(card, { categoryLabel, nickname, link }) {
 /** 화면 전체(주 + 카테고리) 공유 텍스트 */
 export function viewShareText({ weekLabel, categoryLabel, nickname, link }) {
   const where = categoryLabel ? ` · ${categoryLabel}` : '';
-  return [`${weekLabel} 주간정보${where}`, '', `보낸 사람: ${normalizeNickname(nickname)}`, link].join('\n');
+  return [`🍀 라니네 전용 앱 · ${weekLabel}${where}`, '', `보낸 사람: ${normalizeNickname(nickname)}`, link].join('\n');
 }

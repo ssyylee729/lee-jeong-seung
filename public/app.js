@@ -1,6 +1,10 @@
 import { mondayOf, weekRangeLabel } from './lib/week.js';
-import { buildWeek } from './lib/briefing.js';
+import { buildWeek, quoteForWeek, summarize } from './lib/briefing.js';
+import { MOODS, pickMood } from './lib/mood.js';
+import { oldestKeptWeek } from './lib/retention.js';
+import { safeImageUrl } from './lib/thumb.js';
 import {
+  DEFAULT_CATEGORY,
   DEFAULT_NICKNAME,
   NICKNAME_MAX,
   cardShareText,
@@ -12,7 +16,7 @@ import {
 
 const $ = (id) => document.getElementById(id);
 
-const state = { info: null, diet: null, weeks: [], weekIndex: 0, category: 'all', nickname: DEFAULT_NICKNAME };
+const state = { info: null, diet: null, weeks: [], weekIndex: 0, category: DEFAULT_CATEGORY, nickname: DEFAULT_NICKNAME };
 
 // ---------- 닉네임 (이 기기에만 저장) ----------
 
@@ -114,10 +118,10 @@ function shareCard(card) {
 $('share-view').addEventListener('click', () => {
   const isCurrent = currentWeek() === mondayOf();
   share({
-    title: '이번 주 놓치기 쉬운 정보',
+    title: '라니네 전용 앱',
     text: viewShareText({
       weekLabel: `${isCurrent ? '이번 주 ' : ''}${weekRangeLabel(currentWeek())}`,
-      categoryLabel: state.category === 'all' ? '' : categoryLabel(state.category),
+      categoryLabel: categoryLabel(state.category),
       nickname: state.nickname,
       link: currentLink(),
     }),
@@ -139,7 +143,9 @@ async function loadInfo() {
   state.diet = diet;
 
   const thisWeek = mondayOf();
-  const weeks = [...new Set(info.items.map((i) => i.week))];
+  // 오래된 데이터가 파일에 남아 있어도 최근 8주만 넘겨볼 수 있다
+  const oldest = oldestKeptWeek(thisWeek);
+  const weeks = [...new Set(info.items.map((i) => i.week))].filter((w) => w >= oldest);
   if (!weeks.includes(thisWeek)) weeks.push(thisWeek);
   state.weeks = weeks.sort().reverse(); // 최신 주가 index 0
   state.weekIndex = state.weeks.indexOf(thisWeek);
@@ -150,11 +156,39 @@ async function loadInfo() {
   state.category = view.category;
 }
 
+function renderRani(mood) {
+  $('rani').src = `rani/${mood}.svg`;
+  $('rani').alt = `라니 (${MOODS[mood].label})`;
+  $('rani-say').textContent = MOODS[mood].say;
+}
+
+// 다이어트 문구는 탭이 아니라 상단에 고정해서 늘 보여준다
+function renderDietQuote() {
+  $('diet-quote').textContent = `💪 ${quoteForWeek(state.diet, currentWeek())}`;
+}
+
+// Claude 가 매주 써 둔 핵심 3줄이 있으면 그것을, 없으면 앱이 임박한 순서로 고른 줄을 보여준다.
+// 후자는 "핫한 것"이 아니라 날짜순이므로 제목을 다르게 달아 구분한다.
+const FALLBACK_TITLE = { concert: '곧 열리는 공연', family: '가까운 기념일', culture: '분야별 가장 가까운 소식' };
+
+function renderSummary(cards) {
+  const written = state.info.briefings?.[currentWeek()]?.[state.category];
+  const lines = written?.length ? written : summarize(state.category, cards);
+  $('summary-title').textContent = written?.length ? '이번 주 핵심 3줄' : (FALLBACK_TITLE[state.category] ?? '요약');
+  $('summary').hidden = !lines.length;
+  $('summary-list').replaceChildren(
+    ...lines.map((text) => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      return li;
+    }),
+  );
+}
+
 function renderFilters() {
   const nav = $('filters');
   nav.replaceChildren();
-  const entries = [{ id: 'all', name: '전체', emoji: '' }, ...state.info.categories];
-  for (const c of entries) {
+  for (const c of state.info.categories) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'chip';
@@ -172,8 +206,11 @@ function renderItems() {
   const week = state.weeks[state.weekIndex];
   const cats = new Map(state.info.categories.map((c) => [c.id, c]));
   const items = buildWeek({ info: state.info, diet: state.diet, week })
-    .filter((i) => state.category === 'all' || i.category === state.category)
+    .filter((i) => i.category === state.category)
     .sort((a, b) => a.sort.localeCompare(b.sort));
+
+  renderRani(pickMood({ category: state.category, cards: items }));
+  renderSummary(items);
 
   const root = $('items');
   root.replaceChildren();
@@ -190,6 +227,8 @@ function renderItems() {
     const cat = cats.get(item.category);
     const card = document.createElement('article');
     card.className = `card cat-${item.category}`;
+    const body = document.createElement('div');
+    body.className = 'card-body';
 
     const catEl = document.createElement('div');
     catEl.className = 'cat';
@@ -198,12 +237,12 @@ function renderItems() {
 
     const h = document.createElement('h3');
     h.textContent = item.title;
-    card.append(catEl, h);
+    body.append(catEl, h);
 
     if (item.summary) {
       const p = document.createElement('p');
       p.textContent = item.summary;
-      card.append(p);
+      body.append(p);
     }
 
     const meta = document.createElement('div');
@@ -233,7 +272,7 @@ function renderItems() {
       a.textContent = '바로가기 →';
       meta.append(a);
     }
-    if (meta.childElementCount) card.append(meta);
+    if (meta.childElementCount) body.append(meta);
 
     const shareBtn = document.createElement('button');
     shareBtn.type = 'button';
@@ -241,7 +280,28 @@ function renderItems() {
     shareBtn.textContent = '공유';
     shareBtn.setAttribute('aria-label', `${item.title} 공유하기`);
     shareBtn.addEventListener('click', () => shareCard(item));
-    card.append(shareBtn);
+    body.append(shareBtn);
+
+    // 포스터·표지 썸네일 (https 이미지만). 불러오지 못하면 조용히 없앤다.
+    const imageUrl = safeImageUrl(item.image);
+    if (imageUrl) {
+      const img = document.createElement('img');
+      img.className = 'thumb';
+      img.src = imageUrl;
+      img.alt = '';
+      img.width = 72;
+      img.height = 96;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.referrerPolicy = 'no-referrer'; // 출처 페이지를 알리지 않는다 (서버 쪽 확인도 Referer 없이 했다)
+      img.addEventListener('error', () => {
+        img.remove();
+        card.classList.remove('has-thumb');
+      });
+      card.classList.add('has-thumb');
+      card.append(img);
+    }
+    card.append(body);
 
     root.append(card);
   }
@@ -256,6 +316,7 @@ function renderWeekNav() {
 }
 
 function render() {
+  renderDietQuote();
   renderWeekNav();
   renderFilters();
   renderItems();
@@ -317,7 +378,7 @@ async function setupNotifications(registration, vapidPublicKey) {
     return;
   }
 
-  status.textContent = '매주 놓치기 쉬운 정보를 알림으로 받아보세요.';
+  status.textContent = '라니네 주간 브리핑을 알림으로 받아보세요.';
   const btn = $('enable-notify');
   btn.hidden = false;
   btn.addEventListener('click', async () => {

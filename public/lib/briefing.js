@@ -75,9 +75,46 @@ export function buildWeek({ info, diet, week, now = new Date() }) {
     }
   }
 
-  cards.push({ category: 'diet', title: quoteForWeek(diet, week), when: '', sort: '0000' });
-
   return cards;
+}
+
+const SUMMARY_LINES = 3;
+const clip = (t, max = 34) => (t.length > max ? `${t.slice(0, max - 1)}…` : t);
+
+/**
+ * 카테고리별 "세 줄 요약". 목록은 이미 중요한 순서(날짜 임박순)로 정렬돼 있다고 보고 위에서부터 고른다.
+ * API 를 쓰지 않고 앱이 직접 만든다.
+ * @returns {string[]} 최대 3줄 (비어 있으면 [])
+ */
+export function summarize(category, cards) {
+  const list = cards.filter((c) => c.category === category);
+  if (!list.length) return [];
+
+  if (category === 'concert') {
+    // 아직 오픈 전인 것 우선, 오픈 시각이 빠른 순
+    const upcoming = list.filter((c) => c.when && !c.when.includes('판매 중'));
+    const pick = (upcoming.length ? upcoming : list).slice(0, SUMMARY_LINES);
+    return pick.map((c) => `${c.artist || c.title} · ${c.when}${c.unverified ? ' (확인 필요)' : ''}`);
+  }
+
+  if (category === 'family') {
+    return list.slice(0, SUMMARY_LINES).map((c) => `${c.title} · ${c.summary}`);
+  }
+
+  if (category === 'culture') {
+    // 영화·OTT·도서·전시를 한 줄씩 골고루: 분야마다 첫 항목
+    const seen = new Set();
+    const lines = [];
+    for (const c of list) {
+      if (seen.has(c.subtype)) continue;
+      seen.add(c.subtype);
+      lines.push(`${c.subtype} · ${clip(c.title)}${c.when ? ` · ${c.when}` : ''}`);
+      if (lines.length === SUMMARY_LINES) break;
+    }
+    return lines;
+  }
+
+  return list.slice(0, SUMMARY_LINES).map((c) => clip(c.title));
 }
 
 function oneLine(text, max = 60) {
@@ -113,7 +150,7 @@ export function buildPush({ info, diet, now = new Date(), siteUrl }) {
   lines.push(`💪 ${oneLine(quoteForWeek(diet, week))}`);
 
   return {
-    title: `이번 주 브리핑`,
+    title: '🍀 라니네 이번 주 브리핑',
     body: lines.join('\n'),
     url: siteUrl,
     counts: { concerts: concerts.length, family: family.length, culture: culture.length },

@@ -183,3 +183,23 @@ button.small.ghost { background: var(--card); color: var(--accent); }
   background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 999px;
   font-size: 0.9rem; box-shadow: 0 4px 16px rgba(0,0,0,.25); z-index: 10;
 }
+
+.title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+.title-row h1 { margin: 0; }
+.rani { flex: none; width: 64px; height: 64px; border-radius: 16px; background: var(--accent-soft); }
+.rani-say { margin: 2px 0 0; color: var(--muted); font-size: 0.85rem; }
+
+.diet-quote {
+  margin: 8px 0 4px; padding: 10px 14px; border-radius: 12px;
+  background: var(--accent-soft); color: var(--text); font-size: 0.92rem; line-height: 1.45;
+}
+.summary {
+  background: var(--card); border: 1px solid var(--accent); border-radius: 14px; padding: 12px 16px;
+}
+.summary h2 { font-size: 0.85rem; color: var(--accent); margin: 0 0 6px; }
+.summary ol { margin: 0; padding-left: 20px; }
+.summary li { margin: 2px 0; font-size: 0.95rem; }
+
+.card.has-thumb { display: flex; gap: 12px; align-items: flex-start; }
+.card-body { min-width: 0; flex: 1; }
+.thumb { flex: none; width: 72px; height: 96px; object-fit: cover; border-radius: 8px; background: var(--accent-soft); }

@@ -3,20 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>이번 주 놓치기 쉬운 정보</title>
+    <title>라니네 전용 앱 🍀</title>
     <meta name="theme-color" content="#4f46e5" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" type="image/png" href="icons/icon-192.png" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="주간정보" />
+    <meta name="apple-mobile-web-app-title" content="라니네" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="top">
-      <h1>이번 주 놓치기 쉬운 정보</h1>
+      <div class="title-row">
+        <img id="rani" class="rani" src="rani/neutral.svg" alt="" width="64" height="64" />
+        <div>
+          <h1>라니네 전용 앱 <span aria-hidden="true">🍀</span></h1>
+          <p id="rani-say" class="rani-say"></p>
+        </div>
+      </div>
+      <p id="diet-quote" class="diet-quote"></p>
       <div class="who">
         <span class="muted">안녕하세요,</span>
         <b id="nickname-label"></b>
@@ -38,6 +45,10 @@
     <nav id="filters" class="filters" aria-label="카테고리"></nav>
 
     <main>
+      <section id="summary" class="summary" aria-label="세 줄 요약" hidden>
+        <h2 id="summary-title">핵심 3줄</h2>
+        <ol id="summary-list"></ol>
+      </section>
       <section id="items" class="items" aria-live="polite"></section>
 
       <section class="card notify" aria-labelledby="notify-title">

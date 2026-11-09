@@ -8,19 +8,31 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import Anthropic from '@anthropic-ai/sdk';
 import { mondayOf, weekRangeLabel } from '../public/lib/week.js';
+import { dropSharedImages, enrichWithThumbnails } from './lib/thumbnail.mjs';
 import {
   collectUrls,
   extractJson,
+  mergeBriefings,
   mergeItems,
   summarizeChange,
   upcomingConcerts,
   validateAll,
+  validateBriefing,
   CONCERT_SITES,
   CULTURE_TYPES,
 } from './lib/merge.mjs';
 
-const MODEL = 'claude-opus-5-5';
-const EFFORT = 'medium';
+// 쓸 수 있는 모델. 모델마다 웹 검색 도구 버전과 서버 fallback 지원이 달라서 여기에 함께 적어 둔다.
+//   tools 'latest': web_search_20260209 / web_fetch_20260209 (동적 필터링)
+//   tools 'basic' : web_search_20250305 / web_fetch_20250910
+//   fallback      : 안전 분류기 거절 시 서버가 대체 모델로 이어서 처리 (beta server-side-fallback-2026-07-01)
+const MODELS = {
+  'claude-opus-5-5': { tools: 'latest', fallback: true },
+  'claude-sonnet-5-5': { tools: 'latest', fallback: true },
+  'claude-haiku-5-5': { tools: 'basic', fallback: false }, // 실험적: 이 조합은 아직 실제로 돌려 보지 못함
+};
+const DEFAULT_MODEL = 'claude-opus-5-5';
+const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
 const MAX_PAUSE_RESUMES = 5;
 const INFO_PATH = new URL('../public/data/info.json', import.meta.url);
 
@@ -33,6 +45,13 @@ function fail(msg) {
   process.exit(1);
 }
 if (Number.isNaN(now.getTime())) fail('--now 값이 올바른 날짜가 아닙니다.');
+
+// 환경변수 CLAUDE_MODEL / CLAUDE_EFFORT (비어 있으면 기본값). GitHub Actions 에서는 수동 실행 입력이나 저장소 Variables 로 넘어온다.
+const MODEL = (arg('model') || process.env.CLAUDE_MODEL || '').trim() || DEFAULT_MODEL;
+const EFFORT = (arg('effort') || process.env.CLAUDE_EFFORT || '').trim() || 'medium';
+const modelConfig = MODELS[MODEL];
+if (!modelConfig) fail(`지원하지 않는 모델입니다: ${MODEL}\n  사용 가능: ${Object.keys(MODELS).join(', ')}`);
+if (!EFFORTS.includes(EFFORT)) fail(`effort 는 ${EFFORTS.join('/')} 중 하나여야 합니다: ${EFFORT}`);
 
 const info = JSON.parse(readFileSync(INFO_PATH, 'utf8'));
 const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(now);
@@ -86,7 +105,15 @@ ${
 - 도서: 교보문고·예스24·알라딘 주간 베스트셀러
 - 전시: 수도권에서 곧 열리거나 화제인 전시
 분야별로 한두 건의 요약 항목이면 충분하고, 전체 12건 안쪽으로 해 주세요. 순위 항목은 "TOP5"처럼 한 항목에 묶고, 집계 기준(서점명, 집계 기간)을 summary에 적으세요.
+여러 작품을 한 항목으로 묶은 것(박스오피스 TOP3, 베스트셀러 TOP5, "요즘 화제" 모음 등)에는 "list": true 를 넣으세요. 포스터·표지 이미지는 앱이 항목의 url 페이지에서 직접 찾으니, 이미지 주소는 쓰지 마세요.
+이미지는 url 페이지의 대표 이미지를 쓰므로, 가능하면 해당 공연·작품·전시 하나를 다루는 페이지(예매 상품 페이지, 공식 안내, 작품 소개)를 url 로 고르세요.
 개봉·공개·개막일처럼 날짜가 있는 항목은 deadline과 deadlineText("개봉", "공개", "개막", "종료" 등)를 채우세요.
+
+## 핵심 3줄 (briefing)
+공연(concert)과 문화(culture) 각각에 대해, 이번 주 가장 주목할 만한 것 3가지를 한 줄씩(각 70자 안팎) 써 주세요. 위 목록을 그대로 옮기지 말고 "무엇이 왜 중요한지"를 요약하세요.
+- 순위, 화제성, 팬층 규모, 매진 속도, 희소성처럼 **조사하면서 실제로 확인한 근거**로 고르세요. 근거 없이 "핫하다", "인기"라고 쓰지 마세요.
+- 인기 순위를 읽지 못했다면 "예매가 가장 임박한" 같은 사실 기준으로 쓰고 그렇게 표현하세요.
+- 시각이 있는 항목은 날짜와 시각을 함께 쓰세요.
 
 ## 출력
 마지막에 아래 형식의 JSON 하나만 \`\`\`json 코드블록으로 출력하세요. 코드블록 밖에는 한두 문장의 메모(확인하지 못한 것 등)만 쓰세요.
@@ -100,8 +127,12 @@ ${
   "culture": [
     { "subtype": "${CULTURE_TYPES.join('|')}", "title": "제목", "summary": "요약",
       "deadline": "2026-11-20 또는 null", "deadlineText": "개봉", "rating": "출처 포함 평점 또는 null",
-      "url": "근거 URL", "unverified": false }
-  ]
+      "url": "근거 URL", "unverified": false, "list": false }
+  ],
+  "briefing": {
+    "concert": ["핵심 한 줄", "핵심 한 줄", "핵심 한 줄"],
+    "culture": ["핵심 한 줄", "핵심 한 줄", "핵심 한 줄"]
+  }
 }
 \`\`\``;
 }
@@ -119,14 +150,19 @@ async function research() {
     const stream = client.beta.messages.stream({
       model: MODEL,
       max_tokens: 64000,
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default', // 안전 분류기가 요청을 거절하면 서버가 대체 모델로 이어서 처리
+      ...(modelConfig.fallback ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' } : {}),
       output_config: { effort: EFFORT },
       system: SYSTEM,
-      tools: [
-        { type: 'web_search_20260209', name: 'web_search', max_uses: 30 },
-        { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 12 },
-      ],
+      tools:
+        modelConfig.tools === 'latest'
+          ? [
+              { type: 'web_search_20260209', name: 'web_search', max_uses: 30 },
+              { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 12 },
+            ]
+          : [
+              { type: 'web_search_20250305', name: 'web_search', max_uses: 30 },
+              { type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 12 },
+            ],
       messages,
     });
     const response = await stream.finalMessage();
@@ -175,7 +211,7 @@ if (arg('response')) {
   console.log(`저장된 응답으로 병합만 테스트합니다: ${arg('response')}`);
 } else {
   if (!process.env.ANTHROPIC_API_KEY) fail('ANTHROPIC_API_KEY 가 필요합니다.');
-  console.log(`${today} 기준 조사 중… (${MODEL}, 웹 검색)`);
+  console.log(`${today} 기준 조사 중… (${MODEL}, effort ${EFFORT}, 웹 검색)`);
   const r = await research();
   finalText = r.finalText;
   seenUrls = r.seenUrls;
@@ -195,12 +231,26 @@ const { accepted, rejected } = validateAll(parsed, { seenUrls, now });
 for (const r of rejected) console.warn(`  제외: ${r}`);
 console.log(`검증 통과: 공연 ${accepted.concerts.length}건, 문화 ${accepted.culture.length}건 (제외 ${rejected.length}건)`);
 
+const { briefing, rejected: briefRejected } = validateBriefing(parsed.briefing);
+for (const r of briefRejected) console.warn(`  제외: ${r}`);
+console.log(`요약: ${Object.entries(briefing).map(([k, v]) => `${k} ${v.length}줄`).join(', ') || '없음 (앱이 임박한 순서로 대신 보여줍니다)'}`);
+
 if (!accepted.concerts.length && !accepted.culture.length) {
   fail('검증을 통과한 항목이 하나도 없어 info.json 을 바꾸지 않습니다.');
 }
 if (!accepted.culture.length) console.warn('  주의: 문화 소식이 비어 있습니다. 이번 주 문화 항목은 비게 됩니다.');
 
 const items = mergeItems(info.items, accepted, { now });
+const briefings = mergeBriefings(info.briefings, briefing, { now });
+
+// 포스터·표지 썸네일: 항목의 url 페이지에서 대표 이미지를 찾는다 (실패해도 항목은 그대로 둔다).
+// 저장된 응답으로 테스트(--response)할 때나 --no-thumbs 일 때는 외부 접속을 하지 않는다.
+if (!arg('response') && !process.argv.includes('--no-thumbs')) {
+  const thumbs = await enrichWithThumbnails(items);
+  const shared = dropSharedImages(items);
+  console.log(`썸네일: 시도 ${thumbs.tried}건 → 성공 ${thumbs.ok}건, 실패 ${thumbs.failed.length}건${shared ? `, 공통 이미지 ${shared}건 제외` : ''}`);
+  for (const f of thumbs.failed) console.warn(`  썸네일 실패: ${f.title.slice(0, 24)} — ${f.reason}`);
+}
 const change = summarizeChange(info.items, items);
 console.log(`변경: +${change.added} / -${change.removed} (총 ${items.length}건)`);
 
@@ -211,6 +261,6 @@ for (const i of accepted.concerts) {
 if (dryRun) {
   console.log('--dry-run: info.json 을 쓰지 않았습니다.');
 } else {
-  writeFileSync(INFO_PATH, `${JSON.stringify({ ...info, items }, null, 2)}\n`);
+  writeFileSync(INFO_PATH, `${JSON.stringify({ ...info, items, briefings }, null, 2)}\n`);
   console.log('public/data/info.json 을 갱신했습니다.');
 }
