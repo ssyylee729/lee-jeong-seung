@@ -13,19 +13,25 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false # 배포 중인 실행을 도중에 끊지 않는다 (Pages 공식 템플릿과 같은 설정)
 
 jobs:
-  deploy:
+  # 업로드와 배포를 나눈다: 아티팩트가 확정된 뒤에 배포 job 이 시작되도록 (공식 템플릿 구조)
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
