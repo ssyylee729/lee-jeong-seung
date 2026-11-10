@@ -11,7 +11,7 @@ public/            GitHub Pages 에 올라가는 PWA
 scripts/update-info.mjs      Claude(웹 검색)로 공연·문화 정보를 조사해 info.json 갱신
 scripts/send-push.mjs        알림 발송
 .github/workflows/
-  weekly-update.yml          [테스트 기간] 매일 07:07 KST 에 조사 → info.json 커밋 → 배포
+  weekly-update.yml          [테스트 기간] 매일 14:45 KST 에 조사 → info.json 커밋 → 배포
   weekly-push.yml            [테스트 기간] 매일 09:03 KST 에 알림 발송 (요일/시간은 여기서 변경)
   deploy-pages.yml           public/ 을 GitHub Pages 에 배포
 ```
@@ -64,7 +64,7 @@ scripts/send-push.mjs        알림 발송
 
 | 시각(KST) | workflow | 하는 일 |
 |---|---|---|
-| 매일 07:07 (테스트 기간) | `weekly-update.yml` | Claude 가 웹 검색으로 공연 예매 일정·문화 소식을 조사 → 검증 → `info.json` 커밋 → Pages 배포 |
+| 매일 14:45 (테스트 기간) | `weekly-update.yml` | Claude 가 웹 검색으로 공연 예매 일정·문화 소식을 조사 → 검증 → `info.json` 커밋 → Pages 배포 |
 | 매일 09:03 (테스트 기간) | `weekly-push.yml` | 갱신된 `info.json` 으로 알림 발송 |
 
 조사 결과는 그대로 믿지 않고 `scripts/lib/merge.mjs` 에서 걸러서 합친다.
