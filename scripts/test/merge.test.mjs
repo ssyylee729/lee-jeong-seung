@@ -159,3 +159,33 @@ test('문화 항목: list 플래그는 true 일 때만 통과', () => {
   ] }, ctx);
   assert.deepEqual(ok.accepted.culture.map((c) => c.list), [true, undefined, undefined]);
 });
+
+test('매일 돌려도 안전: 같은 주의 오픈 전 공연은 새 결과에 없어도 보존, 썸네일은 이어받는다', () => {
+  const mon = new Date('2026-11-16T07:07:00+09:00');
+  const tue = new Date('2026-11-17T07:07:00+09:00');
+  const c = (artist, openAt) => ({ category: 'concert', artist, title: `${artist} 콘서트`, openAt, subtype: '인터파크', url: `https://x.com/${artist}`, unverified: true });
+  const cu = (title) => ({ category: 'culture', subtype: '영화', title, url: `https://x.com/${title}` });
+
+  let items = mergeItems([], { concerts: [c('A', '2026-11-20T20:00+09:00'), c('B', '2026-11-25T20:00+09:00')], culture: [cu('영화1')] }, { now: mon });
+  items.find((i) => i.artist === 'A').image = 'https://cdn.example.com/a.jpg';
+
+  // 화요일: B 는 이번에 못 찾음, C 신규, 영화1 은 사라지고 영화2 추가
+  items = mergeItems(items, { concerts: [c('A', '2026-11-20T20:00+09:00'), c('C', '2026-11-27T20:00+09:00')], culture: [cu('영화2')] }, { now: tue });
+  assert.deepEqual(items.filter((i) => i.category === 'concert').map((i) => i.artist).sort(), ['A', 'B', 'C']); // B 보존, A 중복 없음
+  assert.deepEqual(items.filter((i) => i.category === 'culture').map((i) => i.title), ['영화2']); // 문화는 교체
+  assert.equal(items.find((i) => i.artist === 'A').image, 'https://cdn.example.com/a.jpg'); // 썸네일 유지
+  assert.equal(items.find((i) => i.artist === 'C').image, undefined);
+
+  // 이미 오픈한 공연은 새 결과에 없으면 정리된다
+  const later = new Date('2026-11-22T07:07:00+09:00');
+  const out = mergeItems(items, { concerts: [], culture: [] }, { now: later });
+  assert.ok(!out.some((i) => i.artist === 'A')); // 11/20 에 이미 오픈
+  assert.ok(out.some((i) => i.artist === 'B' || i.artist === 'C')); // 아직 오픈 전
+});
+
+test('묶음(list) 항목은 같은 url 이라도 썸네일을 물려받지 않는다', () => {
+  const now2 = new Date('2026-11-17T07:07:00+09:00');
+  const existing = [{ week: '2026-11-16', category: 'culture', subtype: '도서', title: 'TOP5', url: 'https://x.com/t', image: 'https://cdn.example.com/x.jpg' }];
+  const out = mergeItems(existing, { concerts: [], culture: [{ category: 'culture', subtype: '도서', title: 'TOP5', url: 'https://x.com/t', list: true }] }, { now: now2 });
+  assert.equal(out[0].image, undefined);
+});

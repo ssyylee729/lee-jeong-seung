@@ -140,9 +140,11 @@ export function upcomingConcerts(items, now) {
 }
 
 /**
- * 기존 items 에 새 결과를 합친다.
- *  - 이번 주(week) 항목은 통째로 교체 (같은 주에 다시 돌려도 중복되지 않는다)
- *  - 이전 주에 적힌 "아직 오픈 전" 공연은 새 결과로 대체. 단, 새 결과에 같은 artist 가 없으면 그대로 보존
+ * 기존 items 에 새 결과를 합친다. 같은 주에 여러 번(매일) 돌려도 안전하도록 만들었다.
+ *  - 아직 오픈 전인 공연은 새 결과에 같은 artist 가 없으면 **같은 주에 적은 것이라도 보존한다**
+ *    (검색이 하루 이틀 흔들려서 예매 예정 공연이 사라지면 안 되므로). 새 결과에 있으면 새 것으로 교체.
+ *  - 그 밖의 이번 주 항목(문화 소식, 이미 오픈한 공연)은 통째로 교체한다.
+ *  - 교체되는 항목이 같은 url 의 이전 항목과 이어지면 이미 찾아 둔 썸네일(image)을 물려받는다.
  *  - KEEP_WEEKS 주보다 오래된 항목은 정리. 단, 아직 오픈 전인 공연은 오래된 주에 적혀 있어도 남긴다
  */
 export function mergeItems(existing, accepted, { now }) {
@@ -151,12 +153,17 @@ export function mergeItems(existing, accepted, { now }) {
   const newArtists = new Set(accepted.concerts.map((c) => c.artist));
 
   const kept = existing.filter((i) => {
+    if (isUpcomingConcert(i, now)) return !newArtists.has(i.artist); // 새 결과가 없는 건 (같은 주·오래된 주 모두) 보존
     if (i.week === week) return false;
-    if (isUpcomingConcert(i, now)) return !newArtists.has(i.artist); // 새 결과가 없는 건 (오래됐어도) 보존
     return i.week >= oldest;
   });
 
-  const fresh = [...accepted.concerts, ...accepted.culture].map((i) => ({ week, ...i }));
+  // 같은 주에 이미 받아 둔 썸네일은 같은 url 이면 이어받는다 (매일 다시 받지 않도록)
+  const imageByUrl = new Map(existing.filter((i) => i.image && i.url).map((i) => [i.url, i.image]));
+  const fresh = [...accepted.concerts, ...accepted.culture].map((i) => {
+    const image = imageByUrl.get(i.url);
+    return { week, ...i, ...(image && !i.list ? { image } : {}) };
+  });
   return [...kept, ...fresh];
 }
 

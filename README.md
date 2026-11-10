@@ -11,7 +11,7 @@ public/            GitHub Pages 에 올라가는 PWA
 scripts/update-info.mjs      Claude(웹 검색)로 공연·문화 정보를 조사해 info.json 갱신
 scripts/send-push.mjs        알림 발송
 .github/workflows/
-  weekly-update.yml          월요일 07:07 KST 에 조사 → info.json 커밋 → 배포
+  weekly-update.yml          [테스트 기간] 매일 07:07 KST 에 조사 → info.json 커밋 → 배포
   weekly-push.yml            월요일 09:03 KST 에 알림 발송 (요일/시간은 여기서 변경)
   deploy-pages.yml           public/ 을 GitHub Pages 에 배포
 ```
@@ -64,14 +64,14 @@ scripts/send-push.mjs        알림 발송
 
 | 시각(KST) | workflow | 하는 일 |
 |---|---|---|
-| 월 07:07 | `weekly-update.yml` | Claude 가 웹 검색으로 공연 예매 일정·문화 소식을 조사 → 검증 → `info.json` 커밋 → Pages 배포 |
+| 매일 07:07 (테스트 기간) | `weekly-update.yml` | Claude 가 웹 검색으로 공연 예매 일정·문화 소식을 조사 → 검증 → `info.json` 커밋 → Pages 배포 |
 | 월 09:03 | `weekly-push.yml` | 갱신된 `info.json` 으로 알림 발송 |
 
 조사 결과는 그대로 믿지 않고 `scripts/lib/merge.mjs` 에서 걸러서 합친다.
 
 - 날짜·시각·종류(subtype)·URL 형식이 틀린 항목은 버린다 (로그에 `제외:` 로 남는다).
 - `unverified: false`(확인됨)는 **Claude 가 실제로 검색/조회한 URL 을 근거로 댄 경우에만** 인정한다. 아니면 "⚠️ 공식 공지 확인 필요"가 붙는다.
-- 이번 주 항목은 통째로 교체한다. 같은 주에 두 번 돌려도 중복되지 않는다.
+- **같은 주에 여러 번(테스트 기간엔 매일) 돌려도 안전하다.** 문화 소식은 그날 결과로 교체하고, 공연은 중복 없이 합친다. 아직 오픈 전인 공연은 그날 검색에서 빠져도 지우지 않는다. 이미 받은 썸네일은 다시 받지 않고, 결과가 어제와 같으면 커밋도 만들어지지 않는다.
 - 이전 주에 올린 **아직 오픈 전인 공연**은 다시 확인시키고, 새 결과에 없으면 그대로 남겨 둔다 (놓치지 않으려고).
 - **최근 8주(약 두 달)만 보관한다.** 그보다 오래된 항목은 매주 실행 때 `info.json` 에서 지우고, 화면에서도 8주 전까지만 넘겨볼 수 있다. 단, 아직 오픈 전인 공연은 오래된 주에 적혀 있어도 남긴다. 기간은 `public/lib/retention.js` 의 `KEEP_WEEKS` 한 곳에서 바꾼다.
 - 유효한 항목이 하나도 없으면 `info.json` 을 건드리지 않고 workflow 를 실패시킨다 (Actions 알림 메일로 알 수 있다).
@@ -116,6 +116,11 @@ scripts/send-push.mjs        알림 발송
 - **매주 자동 실행에 적용**: 저장소 *Settings → Secrets and variables → Actions → **Variables** 탭*에 `CLAUDE_MODEL`, `CLAUDE_EFFORT` 를 만든다. 지우면 기본값(`claude-opus-5-5`, `medium`)으로 돌아간다.
 - **로컬에서**: `npm run update -- --dry-run --model=claude-sonnet-5-5 --effort=low`
 - 목록에 없는 모델을 쓰려면 `scripts/update-info.mjs` 의 `MODELS` 에 모델 ID 와 웹 검색 도구 버전을 추가한다.
+
+## 테스트 기간이 끝나면
+
+조사를 매일 돌리는 건 테스트용이다. 결과가 안정적이면 `.github/workflows/weekly-update.yml` 의 cron 을 일요일 밤 한 번으로 줄인다 (`'7 22 * * 0'` = 월요일 07:07 KST).
+매일 돌리면 호출 비용이 7배이니 첫 며칠 `dry_run` 로그의 검색 횟수·토큰 수로 하루 비용을 계산해 두자. 또 조사 결과가 날마다 조금씩 달라져 `info.json` 이 매일 바뀌고 Pages 배포도 매일 일어날 수 있다.
 
 ## 비용과 한계
 

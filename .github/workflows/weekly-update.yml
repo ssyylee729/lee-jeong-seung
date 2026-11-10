@@ -2,8 +2,9 @@ name: Weekly update
 
 on:
   schedule:
-    # 일요일 22:07 UTC = 월요일 07:07 KST. 월요일 09:03 KST 알림(weekly-push.yml) 전에 끝나도록 2시간 앞서 돌린다.
-    - cron: '7 22 * * 0'
+    # [테스트 기간] 매일 22:07 UTC = 매일 07:07 KST. 월요일 09:03 KST 알림(weekly-push.yml) 전에 끝난다.
+    # 테스트가 끝나면 주 1회로 줄인다: 일요일 밤만 돌리려면 '7 22 * * 0' (= 월요일 07:07 KST)
+    - cron: '7 22 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
