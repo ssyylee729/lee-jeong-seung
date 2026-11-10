@@ -203,3 +203,29 @@ button.small.ghost { background: var(--card); color: var(--accent); }
 .card.has-thumb { display: flex; gap: 12px; align-items: flex-start; }
 .card-body { min-width: 0; flex: 1; }
 .thumb { flex: none; width: 72px; height: 96px; object-fit: cover; border-radius: 8px; background: var(--accent-soft); }
+
+.calendar { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+.cal-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.cal-head h2 { margin: 0; flex: 1; text-align: center; font-size: 1.05rem; }
+.cal-head button {
+  min-width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 1.2rem; line-height: 1; padding: 0;
+}
+.cal-head .cal-today { width: auto; padding: 0 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; color: var(--accent); border-color: var(--accent); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.cal-dow { text-align: center; font-size: 0.75rem; color: var(--muted); margin-bottom: 3px; }
+.cal-cell {
+  position: relative; aspect-ratio: 1 / 1.05; border-radius: 10px; padding: 4px 2px;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 1px;
+  font-size: 0.85rem; background: var(--bg);
+}
+.cal-cell.out { opacity: 0.35; }
+.cal-cell.sun .cal-day, .cal-dow .sun { color: #e5484d; }
+.cal-cell.sat .cal-day, .cal-dow .sat { color: #3b82f6; }
+.cal-cell.today { outline: 2px solid var(--accent); }
+.cal-cell.has-event { background: var(--accent-soft); }
+.cal-marks { font-size: 0.95rem; line-height: 1; }
+.cal-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.92rem; }
+.cal-list li { display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; }
+.cal-list em { margin-left: auto; font-style: normal; color: var(--warn); font-weight: 600; font-size: 0.85rem; }
+.cal-none { color: var(--muted); }

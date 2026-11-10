@@ -49,6 +49,19 @@
         <h2 id="summary-title">핵심 3줄</h2>
         <ol id="summary-list"></ol>
       </section>
+      <section id="calendar" class="calendar" aria-label="가족 기념일 달력" hidden>
+        <div class="cal-head">
+          <button id="cal-prev" type="button" aria-label="이전 달">‹</button>
+          <h2 id="cal-title"></h2>
+          <button id="cal-next" type="button" aria-label="다음 달">›</button>
+          <button id="cal-today" type="button" class="cal-today">오늘</button>
+        </div>
+        <div class="cal-grid cal-dow" aria-hidden="true">
+          <span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="sat">토</span>
+        </div>
+        <div id="cal-grid" class="cal-grid" role="grid"></div>
+        <ul id="cal-list" class="cal-list"></ul>
+      </section>
       <section id="items" class="items" aria-live="polite"></section>
 
       <section class="card notify" aria-labelledby="notify-title">

@@ -1,4 +1,4 @@
-const CACHE = 'weekly-info-v8';
+const CACHE = 'weekly-info-v9';
 const SHELL = [
   './',
   'index.html',

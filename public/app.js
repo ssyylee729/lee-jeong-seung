@@ -3,6 +3,8 @@ import { buildWeek, quoteForWeek, summarize } from './lib/briefing.js';
 import { MOODS, pickMood } from './lib/mood.js';
 import { oldestKeptWeek } from './lib/retention.js';
 import { safeImageUrl } from './lib/thumb.js';
+import { eventTitle, monthGrid } from './lib/family.js';
+import { kstParts } from './lib/week.js';
 import {
   DEFAULT_CATEGORY,
   DEFAULT_NICKNAME,
@@ -307,6 +309,97 @@ function renderItems() {
   }
 }
 
+// ---------- 가족 기념일 달력 ----------
+
+const cal = { year: 0, month: 0 };
+
+function todayKst() {
+  return kstParts(new Date()).date;
+}
+
+function resetCalendarToToday() {
+  const [y, m] = todayKst().split('-').map(Number);
+  cal.year = y;
+  cal.month = m;
+}
+
+function moveMonth(delta) {
+  const d = new Date(Date.UTC(cal.year, cal.month - 1 + delta, 1));
+  cal.year = d.getUTCFullYear();
+  cal.month = d.getUTCMonth() + 1;
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const section = $('calendar');
+  section.hidden = state.category !== 'family';
+  if (section.hidden) return;
+
+  $('cal-title').textContent = `${cal.year}년 ${cal.month}월`;
+  const today = todayKst();
+  const grid = $('cal-grid');
+  grid.replaceChildren();
+
+  for (const week of monthGrid(cal.year, cal.month)) {
+    for (const [col, cell] of week.entries()) {
+      const el = document.createElement('div');
+      el.setAttribute('role', 'gridcell');
+      el.className = ['cal-cell', cell.inMonth ? '' : 'out', cell.date === today ? 'today' : '', col === 0 ? 'sun' : '', col === 6 ? 'sat' : '']
+        .filter(Boolean)
+        .join(' ');
+      const num = document.createElement('span');
+      num.className = 'cal-day';
+      num.textContent = cell.day;
+      el.append(num);
+      if (cell.events.length) {
+        el.classList.add('has-event');
+        const marks = document.createElement('span');
+        marks.className = 'cal-marks';
+        marks.textContent = [...new Set(cell.events.map((e) => e.emoji))].join('');
+        el.append(marks);
+        el.setAttribute('aria-label', `${cell.date} ${cell.events.map((e) => eventTitle(e)).join(', ')}`);
+      }
+      grid.append(el);
+    }
+  }
+
+  // 이 달의 기념일 목록 (달력 칸이 작아서 이름은 여기에 적는다)
+  const list = $('cal-list');
+  list.replaceChildren();
+  const inMonth = monthGrid(cal.year, cal.month)
+    .flat()
+    .filter((c) => c.inMonth && c.events.length);
+  if (!inMonth.length) {
+    const li = document.createElement('li');
+    li.className = 'cal-none';
+    li.textContent = '이 달에는 기념일이 없어요.';
+    list.append(li);
+    return;
+  }
+  for (const cell of inMonth) {
+    for (const ev of cell.events) {
+      const li = document.createElement('li');
+      const left = Math.round((Date.parse(`${cell.date}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86400000);
+      const when = left === 0 ? '오늘' : left > 0 ? `D-${left}` : `${-left}일 지남`;
+      const date = document.createElement('b');
+      date.textContent = `${cal.month}/${cell.day}`;
+      const label = document.createElement('span');
+      label.textContent = ` ${eventTitle(ev)}${ev.calendar === 'lunar' ? ' (음력)' : ''}`;
+      const dd = document.createElement('em');
+      dd.textContent = when;
+      li.append(date, label, dd);
+      list.append(li);
+    }
+  }
+}
+
+$('cal-prev').addEventListener('click', () => moveMonth(-1));
+$('cal-next').addEventListener('click', () => moveMonth(1));
+$('cal-today').addEventListener('click', () => {
+  resetCalendarToToday();
+  renderCalendar();
+});
+
 function renderWeekNav() {
   const week = state.weeks[state.weekIndex];
   const isCurrent = week === mondayOf();
@@ -320,6 +413,7 @@ function render() {
   renderWeekNav();
   renderFilters();
   renderItems();
+  renderCalendar();
   syncUrl();
 }
 
@@ -423,6 +517,7 @@ if (navigator.share) {
 // ---------- 시작 ----------
 
 async function main() {
+  resetCalendarToToday();
   state.nickname = loadNickname();
   renderNickname();
   await loadInfo();

@@ -75,3 +75,56 @@ export function upcomingFamilyEvents(now = new Date()) {
 export function eventTitle(e) {
   return `${e.emoji} ${e.title ?? `${e.who} ${e.label}`}`;
 }
+
+const pad = (n) => String(n).padStart(2, '0');
+
+/** year 년 month(1~12) 월 안의 기념일: { 'YYYY-MM-DD': [event, ...] } (음력 기념일은 그 달에 해당하는 양력 날짜로 환산) */
+export function familyEventsInMonth(year, month) {
+  const out = {};
+  const add = (date, ev) => (out[date] ??= []).push(ev);
+  const last = new Date(Date.UTC(year, month, 0)).getUTCDate();
+
+  for (const ev of FAMILY_EVENTS) {
+    if (ev.calendar === 'solar') {
+      if (ev.month === month && ev.day <= last) add(`${year}-${pad(month)}-${pad(ev.day)}`, ev);
+    }
+  }
+  // 음력: 그 달의 모든 날을 음력으로 바꿔서 맞는 날을 찾는다 (윤달은 평달 기준 날짜와 구분)
+  const lunar = FAMILY_EVENTS.filter((e) => e.calendar === 'lunar');
+  if (lunar.length) {
+    for (let day = 1; day <= last; day++) {
+      const date = new Date(Date.UTC(year, month - 1, day));
+      const l = lunarOf(date);
+      if (l.leap) continue;
+      for (const ev of lunar) if (ev.month === l.month && ev.day === l.day) add(ymd(date), ev);
+    }
+  }
+  return out;
+}
+
+/**
+ * 달력 격자: 일요일 시작, 항상 7의 배수 칸. 이전/다음 달 날짜는 inMonth=false 로 채운다.
+ * @returns {{ date: string, day: number, inMonth: boolean, events: object[] }[][]} 주 단위 배열
+ */
+export function monthGrid(year, month) {
+  const events = {
+    ...familyEventsInMonth(month === 1 ? year - 1 : year, month === 1 ? 12 : month - 1),
+    ...familyEventsInMonth(year, month),
+    ...familyEventsInMonth(month === 12 ? year + 1 : year, month === 12 ? 1 : month + 1),
+  };
+  const first = new Date(Date.UTC(year, month - 1, 1));
+  const start = new Date(first.getTime() - first.getUTCDay() * DAY_MS);
+  const lastDay = new Date(Date.UTC(year, month, 0));
+  const weeks = Math.ceil((first.getUTCDay() + lastDay.getUTCDate()) / 7);
+  const grid = [];
+  for (let w = 0; w < weeks; w++) {
+    const row = [];
+    for (let d = 0; d < 7; d++) {
+      const cell = new Date(start.getTime() + (w * 7 + d) * DAY_MS);
+      const date = ymd(cell);
+      row.push({ date, day: cell.getUTCDate(), inMonth: cell.getUTCMonth() === month - 1, events: events[date] ?? [] });
+    }
+    grid.push(row);
+  }
+  return grid;
+}

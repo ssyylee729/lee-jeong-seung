@@ -12,7 +12,7 @@ scripts/update-info.mjs      Claude(웹 검색)로 공연·문화 정보를 조�
 scripts/send-push.mjs        알림 발송
 .github/workflows/
   weekly-update.yml          [테스트 기간] 매일 07:07 KST 에 조사 → info.json 커밋 → 배포
-  weekly-push.yml            월요일 09:03 KST 에 알림 발송 (요일/시간은 여기서 변경)
+  weekly-push.yml            [테스트 기간] 매일 09:03 KST 에 알림 발송 (요일/시간은 여기서 변경)
   deploy-pages.yml           public/ 을 GitHub Pages 에 배포
 ```
 
@@ -65,7 +65,7 @@ scripts/send-push.mjs        알림 발송
 | 시각(KST) | workflow | 하는 일 |
 |---|---|---|
 | 매일 07:07 (테스트 기간) | `weekly-update.yml` | Claude 가 웹 검색으로 공연 예매 일정·문화 소식을 조사 → 검증 → `info.json` 커밋 → Pages 배포 |
-| 월 09:03 | `weekly-push.yml` | 갱신된 `info.json` 으로 알림 발송 |
+| 매일 09:03 (테스트 기간) | `weekly-push.yml` | 갱신된 `info.json` 으로 알림 발송 |
 
 조사 결과는 그대로 믿지 않고 `scripts/lib/merge.mjs` 에서 걸러서 합친다.
 
@@ -119,7 +119,7 @@ scripts/send-push.mjs        알림 발송
 
 ## 테스트 기간이 끝나면
 
-조사를 매일 돌리는 건 테스트용이다. 결과가 안정적이면 `.github/workflows/weekly-update.yml` 의 cron 을 일요일 밤 한 번으로 줄인다 (`'7 22 * * 0'` = 월요일 07:07 KST).
+조사와 알림을 매일 돌리는 건 테스트용이다. 결과가 안정적이면 `.github/workflows/weekly-update.yml` 의 cron 을 일요일 밤 한 번으로 줄이고(`'7 22 * * 0'` = 월요일 07:07 KST), `weekly-push.yml` 은 `'3 0 * * 1'`(월요일 09:03 KST)로 되돌린다.
 매일 돌리면 호출 비용이 7배이니 첫 며칠 `dry_run` 로그의 검색 횟수·토큰 수로 하루 비용을 계산해 두자. 또 조사 결과가 날마다 조금씩 달라져 `info.json` 이 매일 바뀌고 Pages 배포도 매일 일어날 수 있다.
 
 ## 비용과 한계
@@ -132,7 +132,7 @@ scripts/send-push.mjs        알림 발송
 ## 발송 요일/시간 바꾸기
 
 `.github/workflows/weekly-push.yml` 의 `cron` 한 줄. **UTC 기준**이라 한국 시간에서 9시간을 뺀다.
-현재는 월요일 09:03 KST (`3 0 * * 1`).
+현재는 **테스트 기간이라 매일** 09:03 KST (`3 0 * * *`). 주 1회로 되돌리려면 `3 0 * * 1`(월요일) 처럼 마지막 칸에 요일을 넣는다.
 
 ## 로컬에서 확인
 
