@@ -169,6 +169,14 @@ export function mergeItems(existing, accepted, { now }) {
 
 const BRIEF_LINES = 3;
 const BRIEF_MAX = 90;
+// 보는 날에 따라 뜻이 달라지는 말. 요약은 며칠 화면에 남으므로 쓰지 않는다. (절대 날짜로만 쓴다)
+// 규칙: 낱말 **뒤가 한글이 아닐 때** (또는 조사가 붙은 형태) 만 걸러서 "오늘의집", "내일배움카드", "올해의 책" 같은 고유명사는 통과시킨다.
+//   - 걸림: "오늘 20:00", "오늘부터", "내일은", "이번 주", "D-3"
+//   - 통과: "오늘의집", "내일배움카드", "올해의 책"
+// "곧", "현재" 처럼 다른 낱말 안에 흔히 들어가는 것은 오탐이 많아 제외했고 프롬프트에서 안내한다.
+const REL_WORD = '(?:오늘|내일|어제|모레|그저께|글피|금일|명일|올해|금년|이번\\s*주|금주|지난\\s*주|다음\\s*주|차주|이번\\s*달|이달|지난\\s*달|다음\\s*달)';
+const REL_JOSA = '(?:은|는|이|가|도|만|부터|까지|에|에는|에도|에서|로|께|쯤|중|안|이내|내|밤|아침|저녁|오전|오후)';
+export const RELATIVE_TIME = new RegExp(`${REL_WORD}(?![가-힣])|${REL_WORD}${REL_JOSA}(?![가-힣])|D\\s*[-+]\\s*\\d+`);
 export const BRIEF_CATEGORIES = ['concert', 'culture'];
 
 /** 모델이 쓴 요약 줄을 정리한다: 문자열만, 공백 정리, 90자 이하, 분야당 최대 3줄 */
@@ -187,6 +195,7 @@ export function validateBriefing(raw) {
       const t = typeof l === 'string' ? l.replace(/\s+/g, ' ').trim() : '';
       if (!t) rejected.push(`briefing.${key}: 빈 줄/문자열 아님`);
       else if ([...t].length > BRIEF_MAX) rejected.push(`briefing.${key}: ${BRIEF_MAX}자 초과 "${t.slice(0, 20)}…"`);
+      else if (RELATIVE_TIME.test(t)) rejected.push(`briefing.${key}: 상대 시점 표현("${t.match(RELATIVE_TIME)[0]}") 포함 "${t.slice(0, 24)}…"`);
       else lines.push(t);
     }
     if (lines.length) briefing[key] = lines.slice(0, BRIEF_LINES);

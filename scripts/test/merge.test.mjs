@@ -189,3 +189,30 @@ test('묶음(list) 항목은 같은 url 이라도 썸네일을 물려받지 않�
   const out = mergeItems(existing, { concerts: [], culture: [{ category: 'culture', subtype: '도서', title: 'TOP5', url: 'https://x.com/t', list: true }] }, { now: now2 });
   assert.equal(out[0].image, undefined);
 });
+
+test('요약에는 오늘/내일/이번 주 같은 상대 시점 표현을 쓸 수 없다 (절대 날짜만)', async () => {
+  const { validateBriefing, RELATIVE_TIME } = await import('../lib/merge.mjs');
+  const bad = [
+    'AKMU 일반예매 오늘 20:00', '내일 오픈', '어제 매진', '모레부터 판매', '이번 주 1위', '이번주 개봉', '지난주 대비 상승', '다음 주 개막',
+    '금주 최고', '이번 달 개막', '이달 말 종료', 'D-3 임박', 'D - 1', '오늘은 휴관', '내일부터 예매', '오늘 11/10(화) 20:00', '올해 최고 흥행',
+    '오늘까지 신청', '내일 20:00에', '어제와 오늘 같은 맛',
+  ];
+  for (const t of bad) assert.ok(RELATIVE_TIME.test(t), `걸려야 함: ${t}`);
+
+  // 고유명사·관용 표현은 통과시킨다 (낱말 뒤에 한글이 바로 붙는 경우)
+  const good = [
+    '성시경 11/12(목) 20:00 일반예매', '조용필 서울 공연 매진', '엄청나게 곧 열린다', '현재 1위', '올해의 책 선정', '내일배움카드 전시',
+    '오늘의집 협업', '오늘의 책', '내일의 영웅 개봉 11/20', '올해의 감독상 수상작', '어제의 친구들 전시',
+  ];
+  for (const t of good) assert.ok(!RELATIVE_TIME.test(t), `통과해야 함: ${t}`);
+
+  const { briefing, rejected } = validateBriefing({
+    concert: ['AKMU 일반예매 오늘 20:00', 'AKMU 일반예매 11/10(화) 20:00', '성시경 11/12(목) 20:00 오픈'],
+    culture: ['이번 주 박스오피스 1위', '치이카와 5주 연속 1위, 누적 278만'],
+  });
+  assert.deepEqual(briefing.concert, ['AKMU 일반예매 11/10(화) 20:00', '성시경 11/12(목) 20:00 오픈']);
+  assert.deepEqual(briefing.culture, ['치이카와 5주 연속 1위, 누적 278만']);
+  assert.equal(rejected.length, 2);
+  assert.match(rejected[0], /오늘/);
+  assert.match(rejected[1], /이번 ?주/);
+});
