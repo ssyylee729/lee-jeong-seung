@@ -20,72 +20,79 @@
     {
       "week": "2026-11-09",
       "category": "concert",
-      "artist": "한로로",
+      "artist": "한로로(HANRORO)",
       "title": "한로로 (HANRORO) 5th 단독콘서트 [물음표]",
-      "summary": "인스파이어 아레나, 2027.1.2(토) 18:00·1.3(일) 17:00 2회. 데뷔 첫 아레나 공연. NOL·멜론티켓 동시 오픈 11/13(금) 18:00. 선예매 안내 없음.",
-      "url": "https://tickets.interpark.com/contents/notice/detail/2863",
+      "summary": "2027.1/2~3 네이버 아레나 앳 인스파이어. 데뷔 첫 아레나 공연. 일반예매 11/13(금) 18:00 NOL·멜론티켓 오픈 완료, NOL 콘서트 일간 랭킹 1위. 잔여석 여부는 미확인",
+      "url": "https://nol.yanolja.com/ticket/products/26015537",
       "openAt": "2026-11-13T18:00+09:00",
-      "subtype": "인터파크"
-    },
-    {
-      "week": "2026-11-09",
-      "category": "concert",
-      "artist": "옥상달빛",
-      "title": "2026 옥상달빛 연말 콘서트 〈수고했어 올해도〉",
-      "summary": "서울 성수동, 12/11(금) 20:00·12/12(토) 18:00·12/13(일) 16:00 3회. 99,000원. 15주년 기념으로 연극과 노래를 함께 하는 공연. 멜론티켓 오픈 11/13(금) 20:00.",
-      "url": "https://ticket.melon.com/csoon/detail.htm?csoonId=13244",
-      "openAt": "2026-11-13T20:00+09:00",
-      "subtype": "멜론티켓"
+      "subtype": "인터파크",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26015537_p.gif"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
       "artist": "닐로",
       "title": "닐로 연말 단독 콘서트 'Our Season : Stay'",
-      "summary": "롤링홀(마포), 12/31(목) 20:00 1회. 좌석제, 예매 66,000원·현장 77,000원. 멜론티켓 단독판매, 오픈 11/16(월) 20:00.",
+      "summary": "12/31(목) 20:00 롤링홀, 1회 공연. 멜론티켓 단독, 티켓오픈 11/16(월) 20:00 변동 없음. 예매가 66,000원, 현장 77,000원",
       "url": "https://ticket.melon.com/csoon/detail.htm?csoonId=13239",
       "openAt": "2026-11-16T20:00+09:00",
-      "subtype": "멜론티켓"
+      "subtype": "멜론티켓",
+      "image": "https://cdnticket.melon.co.kr/resource/image/upload/ticketopen/2026/11/20261106104755d02e95d4-c0e5-46cc-840d-b82bb30968e4.jpg"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
       "artist": "THE SOLUTIONS(솔루션스)",
       "title": "THE SOLUTIONS(솔루션스) 콘서트 'Hyperscope'",
-      "summary": "NOL 단독판매. NOL 오픈예정 목록 기준 티켓 오픈 11/16(월) 19:00. 공연 날짜·장소와 선예매 여부는 확인하지 못함.",
-      "url": "https://nol.yanolja.com/ticket/display/upcoming",
+      "summary": "NOL 씨어터 합정 동양생명홀, NOL 단독판매. NOL 오픈 예정 목록 기준 11/16(월) 19:00 오픈으로 변동 없음",
+      "url": "https://nol.yanolja.com/ticket/products/26016345",
       "unverified": true,
       "openAt": "2026-11-16T19:00+09:00",
-      "subtype": "인터파크"
+      "subtype": "인터파크",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26016345_p.gif"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
       "artist": "이은미",
       "title": "이은미 콘서트 with 오케스트라 : 추억이 핀다 - 고양",
-      "summary": "고양 공연. NOL 콘서트 오픈예정 목록 기준 오픈 11/16(월) 14:00. 공연일·장소와 선예매 여부는 확인하지 못함.",
-      "url": "https://nol.yanolja.com/ticket/genre/concert",
+      "summary": "고양아람누리 아람극장. NOL 오픈 예정 목록 기준 11/16(월) 14:00 오픈으로 변동 없음",
+      "url": "https://nol.yanolja.com/ticket/products/26016532",
       "unverified": true,
       "openAt": "2026-11-16T14:00+09:00",
-      "subtype": "인터파크"
+      "subtype": "인터파크",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26016532_p.gif"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
       "artist": "변진섭",
       "title": "2027 변진섭 전국투어 콘서트 : 변천사 시즌 2.7 : 타임머신 - 대전",
-      "summary": "대전 공연. NOL 콘서트 오픈예정 목록 기준 오픈 11/16(월) 11:00. 공연일·장소와 선예매 여부는 확인하지 못함.",
-      "url": "https://nol.yanolja.com/ticket/genre/concert",
+      "summary": "대전 우송대학교 우송예술회관. NOL 오픈 예정 목록 기준 11/16(월) 11:00 오픈으로 변동 없음",
+      "url": "https://nol.yanolja.com/ticket/products/26016463",
       "unverified": true,
       "openAt": "2026-11-16T11:00+09:00",
-      "subtype": "인터파크"
+      "subtype": "인터파크",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26016463_p.gif"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "XLOV(엑스러브)",
+      "title": "2027 XLOV TOUR 〈L:(O)v or (X)〉 IN SEOUL",
+      "summary": "2027.1/9~10 성신여대 운정그린캠퍼스, NOL 단독, 데뷔 2주년 공연. 팬클럽 선예매 11/16(월) 17:00(NOL 목록 확인), 일반예매 11/20(금) 17:00(기사 기준)",
+      "url": "https://nol.yanolja.com/ticket/products/26016164",
+      "unverified": true,
+      "openAt": "2026-11-20T17:00+09:00",
+      "subtype": "인터파크",
+      "image": "https://ticketimage.interpark.com/Play/image/large/26/26016164_p.gif"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
       "artist": "DAY6(데이식스)",
       "title": "2026 DAY6 Special Concert 'The Present'",
-      "summary": "KSPO DOME, 12/18~20 3일. 팬클럽(마이데이 6기) 선예매 11/19(목) 20:00~23:59, 일반예매 11/20(금) 20:00. NOL.",
+      "summary": "12/18~20 KSPO DOME 3회, NOL 예매. 마이데이 6기 선예매 11/19(목) 20:00~23:59, 일반예매 11/20(금) 20:00. 여러 기사에서 같은 일정",
       "url": "https://www.ize.co.kr/news/articleView.html?idxno=82512",
       "unverified": true,
       "openAt": "2026-11-20T20:00+09:00",
@@ -95,56 +102,67 @@
     {
       "week": "2026-11-09",
       "category": "concert",
-      "artist": "XLOV(엑스러브)",
-      "title": "2027 XLOV TOUR 〈L:(O)v or (X)〉 IN SEOUL",
-      "summary": "성신여대 운정그린캠퍼스, 2027.1.9~10. 데뷔 2주년 기념 투어 첫 공연. 팬클럽 선예매 11/16(월) 17:00, 일반예매 11/20(금) 17:00. NOL.",
-      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16273461",
+      "artist": "크러쉬(Crush)",
+      "title": "2026 CRUSH CONCERT [CRUSH H♥UR]",
+      "summary": "12/25~26 올림픽공원 티켓링크 라이브 아레나 2회. 팬클럽 선예매 11/19(목) 20:00, 일반예매 11/20(금) 20:00, 티켓링크 예매",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16275692",
       "unverified": true,
-      "openAt": "2026-11-20T17:00+09:00",
-      "subtype": "인터파크",
-      "image": "https://cdn.topstarnews.net/news/photo/202611/16273461_2084577_2453_crop.jpg"
+      "openAt": "2026-11-20T20:00+09:00",
+      "subtype": "티켓링크",
+      "image": "https://cdn.topstarnews.net/news/photo/202611/16275692_2087430_916_crop.jpg"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "SUPER JUNIOR-83z(이특·희철)",
+      "title": "2026-27 SUPER JUNIOR-83z FANCON TOUR [1983] in BUSAN",
+      "summary": "2027.1/23~24 KBS 부산홀 2회. 선예매 1차 11/17(화) 20:00, 2차(글로벌) 11/18(수) 20:00, 일반예매 11/19(목) 20:00. 회차당 1인 2매",
+      "url": "https://ticket.melon.com/csoon/detail.htm?csoonId=13260",
+      "openAt": "2026-11-19T20:00+09:00",
+      "subtype": "멜론티켓"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "concert",
+      "artist": "켄(KEN)",
+      "title": "2026 KEN CONCERT '1X5 : ALL OF ME'",
+      "summary": "12/24~25 XSCALA 2회. 멤버십 선예매 11/19(목) 20:00~11/22, 일반예매 11/23(월) 20:00. 선예매 사전인증 11/18(수) 10:00부터",
+      "url": "https://ticket.melon.com/csoon/detail.htm?csoonId=13240",
+      "openAt": "2026-11-23T20:00+09:00",
+      "subtype": "멜론티켓",
+      "image": "https://cdnticket.melon.co.kr/resource/image/upload/ticketopen/2026/11/20261106175206fe87a4ee-b209-4f9d-baef-2721c02a2551.png"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
       "artist": "김준수(XIA)",
       "title": "2026 XIA Musical Concert with Orchestra Vol.9",
-      "summary": "티켓링크 라이브 아레나, 12/18~20. 4년 만의 Vol.9. NOL·티켓링크. 멤버십 선예매 11/23(월) 20:00(NOL 표기). 일반예매는 11/25(수)이나 시각 미발표라 openAt은 선예매 시각. 기존 등록값 00:00은 확인 안 됨.",
-      "url": "https://nol.yanolja.com/ticket/display/upcoming",
+      "summary": "NOL 오픈 예정 목록 기준 11/23(월) 20:00 오픈. 기존에는 티켓링크로 등록됐지만 NOL에서 판매하는 것으로 확인돼 인터파크로 고침. 장소와 회차는 미확인",
+      "url": "https://nol.yanolja.com/ticket/products/26016270",
       "unverified": true,
       "openAt": "2026-11-23T20:00+09:00",
-      "subtype": "티켓링크"
-    },
-    {
-      "week": "2026-11-09",
-      "category": "concert",
-      "artist": "성시경",
-      "title": "2026 성시경 연말 콘서트 〈성시경〉",
-      "summary": "KSPO DOME, 12/31~2027.1.3 4회. 팬클럽 선예매 11/6(금) 20:00, 일반예매 11/12(목) 20:00에 오픈 완료. NOL 단독, 상품 페이지 콘서트 주간 1위. 잔여석은 확인 못 함.",
-      "url": "https://nol.yanolja.com/ticket/products/26015783",
-      "openAt": "2026-11-12T20:00+09:00",
       "subtype": "인터파크",
-      "image": "https://ticketimage.interpark.com/Play/image/large/26/26015783_p.gif"
+      "image": "https://ticketimage.interpark.com/TicketImage/notice_poster/20/2026110614073136.jpg"
     },
     {
       "week": "2026-11-09",
       "category": "concert",
-      "artist": "AKMU(악뮤)",
-      "title": "2026 AKMU CONCERT [소문의 낙원] ENCORE",
-      "summary": "고양 킨텍스, 2027.1.2(토) 17:00·1.3(일) 16:00. 팬클럽 선예매 11/9(월) 20:00, 일반예매 11/10(화) 20:00에 오픈 완료(YES24). 앙코르 잔여석은 확인 못 함.",
-      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16269123",
+      "artist": "2AM",
+      "title": "2026 2am 콘서트 '다시, 오늘'",
+      "summary": "12/26~27 성신여대 운정그린캠퍼스 대강당. 예스24 예매 11/18(수) 20:00 시작, 회차별 1인 4매, VIP·R석. 선예매 여부는 미확인",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16276063",
       "unverified": true,
-      "openAt": "2026-11-10T20:00+09:00",
+      "openAt": "2026-11-18T20:00+09:00",
       "subtype": "YES24",
-      "image": "https://cdn.topstarnews.net/news/photo/202611/16269123_2078773_3038_crop.jpg"
+      "image": "https://cdn.topstarnews.net/news/photo/202611/16276063_2087881_4246_crop.jpg"
     },
     {
       "week": "2026-11-09",
       "category": "culture",
       "subtype": "영화",
-      "title": "일별 박스오피스 TOP3 (11/11 기준)",
-      "summary": "KOBIS 11/11(수) 집계: 1위 극장판 치이카와: 인어 섬의 비밀(1만9659명, 누적 282만), 2위 폴2: 데드포인트(개봉 첫날), 3위 라라랜드(10주년 재개봉).",
-      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16274377",
+      "title": "일별 박스오피스 TOP3 (11/12)",
+      "summary": "영진위 통합전산망 11/12 기준. 1위 '폴2: 데드포인트'(1만2372명, 누적 3만2505명), 2위 '최종면접', 3위 '극장판 치이카와: 인어 섬의 비밀'. '폭설'은 8위로 진입",
+      "url": "https://www.econovill.com/news/articleView.html?idxno=757131",
       "unverified": true,
       "list": true
     },
@@ -152,32 +170,65 @@
       "week": "2026-11-09",
       "category": "culture",
       "subtype": "영화",
-      "title": "폴2: 데드포인트",
-      "summary": "해발 3300m 산이 배경인 고공 서바이벌 스릴러. 11/11 개봉 첫날 박스오피스 2위.",
-      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16273834",
+      "title": "헝거게임 50번째 추첨의 날",
+      "summary": "프란시스 로렌스 감독의 헝거게임 프리퀄로, 헤이미치의 데스게임 참가를 그림. 랄프 파인즈·엘 패닝 출연, 11/18 한국에서 세계 최초 개봉",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16272625",
       "unverified": true,
-      "deadline": "2026-11-11",
+      "deadline": "2026-11-18",
       "deadlineText": "개봉",
-      "rating": "네이버 관람객 9.8 / CGV 에그지수 92% / 메가박스 7.8 (톱스타뉴스, 11/11 기준)",
-      "image": "https://cdn.topstarnews.net/news/photo/202611/16273834_2085080_4747_crop.jpg"
+      "image": "https://cdn.topstarnews.net/news/photo/202611/16272625_2083473_1339_crop.jpg"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "영화",
+      "title": "폭설",
+      "summary": "김윤석·구교환 주연 미스터리. 폭설로 고립된 시골 기차역에서 역장과 후임이 시신을 발견하는 이야기. 11/12 VIP 시사회 후 11/18 개봉",
+      "url": "https://news.jkn.co.kr/post/1089648",
+      "unverified": true,
+      "deadline": "2026-11-18",
+      "deadlineText": "개봉",
+      "image": "https://images.jkn.co.kr/data/images/full/111/29/1112912.jpg?v=1794493527&width=1200&height=630"
     },
     {
       "week": "2026-11-09",
       "category": "culture",
       "subtype": "OTT",
-      "title": "넷플릭스 한국 TOP10 화제작",
-      "summary": "넷플릭스 공식 집계(10/26~11/1): 닥터X: 하얀 마피아의 시대 한국 TV쇼 4주 연속 1위, 글로벌 비영어 TV 5위. 영화 부문은 허리케인을 거슬러 1위·끝장수사 2위(TrendK).",
-      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16267868",
+      "title": "꿀알바 (넷플릭스)",
+      "summary": "이재욱·고민시 주연 8부작 호러. 11/2~8 넷플릭스 글로벌 비영어 쇼 1위(870만 시청수), 한국 포함 22개국 1위. 국내 주간 시리즈 순위도 정상",
+      "url": "https://www.topstarnews.net/news/articleView.html?idxno=16275350",
       "unverified": true,
-      "list": true
+      "image": "https://cdn.topstarnews.net/news/photo/202611/16275350_2086946_188_crop.jpg"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "OTT",
+      "title": "대리수능 (티빙)",
+      "summary": "배현성·차강윤·박윤호 주연 티빙 오리지널 범죄 스릴러. 수능(11/19)이 끝난 뒤인 11/23(월) 18:00 독점 공개",
+      "url": "https://www.wikitree.co.kr/articles/1171141",
+      "unverified": true,
+      "deadline": "2026-11-23",
+      "deadlineText": "공개",
+      "image": "https://cdnweb01.wikitree.co.kr/webdata/editor/202611/02/202611021643439582_ent_ig.jpeg"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "OTT",
+      "title": "재혼 황후 (디즈니+)",
+      "summary": "신민아·주지훈·이종석·이세영 주연 로맨스 판타지. 11/3 공개 후 역대 디즈니+ 로컬 오리지널 중 세계에서 가장 많이 본 작품이 됨. 평가는 엇갈림",
+      "url": "https://biz.heraldcorp.com/article/10929726",
+      "unverified": true,
+      "image": "https://wimg.heraldcorp.com/news/cms/2026/11/08/news-p.v1.20261108.1823413f10124442855d1efb872db12b_P1.jpg"
     },
     {
       "week": "2026-11-09",
       "category": "culture",
       "subtype": "도서",
-      "title": "교보문고 주간 종합 베스트셀러 TOP5",
-      "summary": "교보문고 주간 종합(11/5~11, 뉴스1. 파이낸셜뉴스는 11/6~12 표기): 1 가호(하루키, 3주 연속) 2 트렌드 코리아 2027 3 자본주의 시스템 해킹 매뉴얼 4 세네카, 오늘을 빼앗기고 있는 당신에게 5 독재자(들)",
-      "url": "https://www.news1.kr/life-culture/book/6352342",
+      "title": "교보문고 종합 주간 베스트셀러 TOP5",
+      "summary": "교보문고 11/6~12 집계. 1 가호(무라카미 하루키, 3주 연속 1위) 2 트렌드 코리아 2027 3 자본주의 시스템 해킹 매뉴얼(신규) 4 세네카, 오늘을 빼앗기고 있는 당신에게 5 독재자(들)",
+      "url": "https://www.fnnews.com/news/202611121138478973",
       "unverified": true,
       "list": true
     },
@@ -185,8 +236,20 @@
       "week": "2026-11-09",
       "category": "culture",
       "subtype": "전시",
+      "title": "조르조 모란디",
+      "summary": "더현대 서울 ALT.1, 11/21~2027.3/1. 모란디 미술관 공동기획, 유화 49점 등 원작 82점. 국내 모란디 전시 중 최대 규모",
+      "url": "https://www.segye.com/newsView/20261108508589",
+      "unverified": true,
+      "deadline": "2026-11-21",
+      "deadlineText": "개막",
+      "image": "https://www.segye.com/content/image/2026/11/08/20261108508908.jpg"
+    },
+    {
+      "week": "2026-11-09",
+      "category": "culture",
+      "subtype": "전시",
       "title": "모던 아트의 탄생 - 스위스 쿤스트하우스 취리히 소장품 특별전",
-      "summary": "국립중앙박물관 특별전시실1, 11/27(금)~2027.4.18. 모네·세잔·칸딘스키·클레·달리·마그리트·자코메티 등. 성인 20,000원(에스콰이어).",
+      "summary": "국립중앙박물관 특별전시실1, 11/27~2027.4/18. 쿤스트하우스 취리히 소장 근대미술 명작전(박물관 공식 예정전시)",
       "url": "https://www.museum.go.kr/MUSEUM/main/index.do",
       "deadline": "2026-11-27",
       "deadlineText": "개막"
@@ -195,14 +258,14 @@
   "briefings": {
     "2026-11-09": {
       "concert": [
-        "성시경 KSPO DOME 연말 4회, 일반예매 11/12(목) 20:00에 오픈 완료. NOL 콘서트 주간 1위, 잔여석은 미확인",
-        "DAY6 KSPO DOME 3일 공연: 팬클럽 선예매 11/19(목) 20:00, 일반예매 11/20(금) 20:00 NOL",
-        "한로로 데뷔 첫 아레나 단독(인스파이어, 2027.1.2~3) 예매 11/13(금) 18:00, NOL·멜론티켓 동시"
+        "한로로 첫 아레나 공연, 일반예매 11/13(금) 18:00 오픈 완료 — NOL 콘서트 일간 랭킹 1위",
+        "DAY6 KSPO DOME 3회 연말 공연: 선예매 11/19(목) 20:00, 일반예매 11/20(금) 20:00",
+        "11/19(목) 20:00 SJ-83z 일반예매, KEN·크러쉬 선예매가 같은 시각에 겹침"
       ],
       "culture": [
-        "9/30 개봉한 극장판 치이카와가 11/11(수) 박스오피스 1위 재탈환, 누적 282만 명",
-        "하루키 신작 '가호' 교보문고 종합 3주 연속 1위, '트렌드 코리아 2027'이 2위",
-        "국립중앙박물관 '모던 아트의 탄생' 11/27(금) 개막. 모네·칸딘스키 등 취리히 소장품, 2027.4.18까지"
+        "'헝거게임 50번째 추첨의 날' 11/18(수) 국내 세계 최초 개봉, 같은 날 '폭설'도 개봉",
+        "넷플릭스 '꿀알바' 11/2~8 글로벌 비영어 1위·22개국 1위, 티빙 '대리수능' 11/23(월) 18:00 공개",
+        "교보 종합 '가호' 3주 연속 1위, 모란디 원작 82점 전시 11/21(토) 더현대 서울 개막"
       ]
     }
   }
